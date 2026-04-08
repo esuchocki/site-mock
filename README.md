@@ -13,7 +13,8 @@ A working mockup of a redesigned Karmê Chöling website. Four pages, all static
 
 All four files live in the root of this repo. Each file is self-contained — the CSS, HTML, and content are all in one place. Nothing else to install, nothing else to wire up.
 
-**Live preview:** `https://<your-username>.github.io/<repo-name>/` *(add the real URL here after GitHub Pages is enabled)*
+**Repository:** https://github.com/esuchocki/site-mock
+**Live preview:** https://esuchocki.github.io/site-mock/index.html
 
 ---
 
