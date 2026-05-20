@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Check Printer — DLM108 (Karme Choling)</title>
+<style>
+  :root {
+    --bg: #f4f1ea;
+    --panel: #ffffff;
+    --ink: #1c1a17;
+    --muted: #6b6358;
+    --line: #d9d2c4;
+    --accent: #7a3b1f;
+    --warn: #8a5a00;
+    --check-ink: #000000;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .app {
+    display: grid;
+    grid-template-columns: 380px 1fr;
+    min-height: 100vh;
+  }
+
+  .controls {
+    background: var(--panel);
+    border-right: 1px solid var(--line);
+    padding: 28px 26px 40px;
+    overflow-y: auto;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+  }
+
+  .controls h1 {
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    margin: 0 0 4px;
+  }
+
+  .controls .sub {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 24px;
+    line-height: 1.5;
+  }
+
+  .group {
+    margin-bottom: 22px;
+    padding-bottom: 22px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .group:last-child { border-bottom: none; }
+
+  .group-title {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    margin-bottom: 12px;
+    font-family: ui-sans-serif, system-ui, sans-serif;
+  }
+
+  label {
+    display: block;
+    font-size: 12px;
+    color: var(--muted);
+    margin: 10px 0 4px;
+    font-family: ui-sans-serif, system-ui, sans-serif;
+  }
+
+  input[type="text"], input[type="date"], input[type="number"], textarea {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    font-size: 14px;
+    font-family: inherit;
+    background: #fff;
+    color: var(--ink);
+  }
+
+  input:focus, textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+
+  textarea { resize: vertical; min-height: 50px; }
+
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+  .actions { display: flex; gap: 8px; margin-top: 8px; }
+
+  button {
+    flex: 1;
+    padding: 10px 14px;
+    border-radius: 4px;
+    border: 1px solid var(--ink);
+    background: var(--ink);
+    color: var(--bg);
+    font-family: ui-sans-serif, system-ui, sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+  }
+
+  button.secondary {
+    background: transparent;
+    color: var(--ink);
+  }
+
+  button:hover { opacity: 0.85; }
+
+  .warn {
+    background: #fff7e6;
+    border: 1px solid #e6c98a;
+    color: var(--warn);
+    padding: 10px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    line-height: 1.5;
+    margin-bottom: 16px;
+    font-family: ui-sans-serif, system-ui, sans-serif;
+  }
+
+  .preview-pane {
+    padding: 32px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+  }
+
+  .check-page {
+    position: relative;
+    width: 8.5in;
+    height: 11in;
+    background: #fff;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  }
+
+  .field {
+    position: absolute;
+    color: var(--check-ink);
+    font-family: "Courier New", Courier, monospace;
+    font-weight: bold;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  @media print {
+    @page { size: letter; margin: 0; }
+    body { background: #fff; }
+    .controls, .preview-pane { padding: 0; }
+    .controls { display: none; }
+    .app { display: block; }
+    .preview-pane { display: block; }
+    .check-page {
+      box-shadow: none;
+      width: 8.5in;
+      height: 11in;
+      page-break-after: avoid;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <aside class="controls">
+    <h1>Check Printer</h1>
+    <p class="sub">Karme Choling &middot; DLM108 laser middle stock</p>
+
+    <div class="warn">
+      <strong>Print at 100% / Actual Size.</strong> Do not use "Fit to Page". Feed checks one at a time through the manual tray. Sign by hand after printing.
+    </div>
+
+    <div class="group">
+      <div class="group-title">Check Details</div>
+
+      <label for="date">Date</label>
+      <input type="date" id="date">
+
+      <label for="payee">Pay to the order of</label>
+      <input type="text" id="payee" placeholder="e.g. Green Mountain Power">
+
+      <div class="row">
+        <div>
+          <label for="amount">Amount ($)</label>
+          <input type="number" id="amount" step="0.01" min="0" placeholder="0.00">
+        </div>
+        <div>
+          <label for="checknum">Check # (preprinted)</label>
+          <input type="text" id="checknum" placeholder="leave blank">
+        </div>
+      </div>
+
+      <label for="amountWords">Amount in words (auto-generated, editable)</label>
+      <textarea id="amountWords" rows="2"></textarea>
+
+      <label for="memo">Memo</label>
+      <input type="text" id="memo" placeholder="e.g. November electric bill">
+    </div>
+
+    <div class="group">
+      <div class="group-title">Print</div>
+      <div class="actions">
+        <button onclick="window.print()">Print</button>
+        <button class="secondary" onclick="resetForm()">Clear form</button>
+      </div>
+    </div>
+  </aside>
+
+  <main class="preview-pane">
+    <div class="check-page">
+
+      <!-- Top voucher (record copy) -->
+      <div class="field" style="left: 6.7in;   top: 0.6in;   font-size: 11pt;" id="topVDate"></div>
+      <div class="field" style="left: 0.5in;   top: 0.6in;   font-size: 11pt;" id="topVPayee"></div>
+      <div class="field" style="left: 0.5in;   top: 0.95in;  font-size: 10pt;" id="topVMemo"></div>
+      <div class="field" style="left: 6.7in;   top: 0.95in;  font-size: 11pt;" id="topVAmount"></div>
+
+      <!-- Check section (must align with preprinted form) -->
+      <div class="field" style="left: 5.600in; top: 4.800in; font-size: 11pt;" id="checkDate"></div>
+      <div class="field" style="left: 6.825in; top: 4.800in; font-size: 12pt;" id="checkAmount"></div>
+      <div class="field" style="left: 0.825in; top: 5.200in; font-size: 11pt; max-width: 6.3in;" id="checkAmountWords"></div>
+      <div class="field" style="left: 0.825in; top: 5.525in; font-size: 12pt;" id="checkPayee"></div>
+      <div class="field" style="left: 0.325in; top: 6.025in; font-size: 10pt;" id="checkMemo"></div>
+
+      <!-- Bottom voucher (record copy) -->
+      <div class="field" style="left: 6.7in;   top: 7.6in;   font-size: 11pt;" id="botVDate"></div>
+      <div class="field" style="left: 0.5in;   top: 7.6in;   font-size: 11pt;" id="botVPayee"></div>
+      <div class="field" style="left: 0.5in;   top: 7.95in;  font-size: 10pt;" id="botVMemo"></div>
+      <div class="field" style="left: 6.7in;   top: 7.95in;  font-size: 11pt;" id="botVAmount"></div>
+
+    </div>
+  </main>
+</div>
+
+<script>
+const ones = ["","One","Two","Three","Four","Five","Six","Seven","Eight","Nine",
+              "Ten","Eleven","Twelve","Thirteen","Fourteen","Fifteen","Sixteen",
+              "Seventeen","Eighteen","Nineteen"];
+const tens = ["","","Twenty","Thirty","Forty","Fifty","Sixty","Seventy","Eighty","Ninety"];
+
+function under1000(n) {
+  let s = "";
+  if (n >= 100) {
+    s += ones[Math.floor(n / 100)] + " Hundred";
+    n %= 100;
+    if (n > 0) s += " ";
+  }
+  if (n >= 20) {
+    s += tens[Math.floor(n / 10)];
+    if (n % 10 > 0) s += "-" + ones[n % 10];
+  } else if (n > 0) {
+    s += ones[n];
+  }
+  return s;
+}
+
+function numberToWords(num) {
+  if (isNaN(num) || num < 0) return "";
+  let dollars = Math.floor(num);
+  const cents = Math.round((num - dollars) * 100);
+  let words = "";
+  if (dollars >= 1000000) {
+    words += under1000(Math.floor(dollars / 1000000)) + " Million";
+    dollars %= 1000000;
+    if (dollars > 0) words += " ";
+  }
+  if (dollars >= 1000) {
+    words += under1000(Math.floor(dollars / 1000)) + " Thousand";
+    dollars %= 1000;
+    if (dollars > 0) words += " ";
+  }
+  if (dollars > 0) words += under1000(dollars);
+  if (words === "") words = "Zero";
+  const centStr = cents.toString().padStart(2, "0");
+  return words + " and " + centStr + "/100";
+}
+
+function formatMoney(num) {
+  if (isNaN(num)) return "";
+  return num.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+function formatDate(iso) {
+  if (!iso) return "";
+  const [y, m, d] = iso.split("-");
+  return `${parseInt(m,10)}/${parseInt(d,10)}/${y}`;
+}
+
+// Pad with asterisks. Standard anti-fraud practice — prevents
+// adding extra words/digits after the line.
+function padLine(text, targetLen) {
+  const remaining = Math.max(0, targetLen - text.length);
+  return text + " " + "*".repeat(remaining);
+}
+
+const $ = id => document.getElementById(id);
+
+function update() {
+  const date = $("date").value;
+  const payee = $("payee").value;
+  const amountNum = parseFloat($("amount").value);
+  const memo = $("memo").value;
+
+  const dateStr = formatDate(date);
+  const amountStr = isNaN(amountNum) ? "" : "***" + formatMoney(amountNum);
+
+  if (document.activeElement.id !== "amountWords") {
+    $("amountWords").value = isNaN(amountNum) ? "" : numberToWords(amountNum);
+  }
+  const wordsRaw = $("amountWords").value;
+  const wordsLine = wordsRaw ? padLine(wordsRaw, 70) : "";
+
+  $("topVDate").textContent   = dateStr;
+  $("topVPayee").textContent  = payee;
+  $("topVMemo").textContent   = memo;
+  $("topVAmount").textContent = amountStr;
+
+  $("checkDate").textContent        = dateStr;
+  $("checkPayee").textContent       = payee;
+  $("checkAmount").textContent      = amountStr;
+  $("checkAmountWords").textContent = wordsLine;
+  $("checkMemo").textContent        = memo;
+
+  $("botVDate").textContent   = dateStr;
+  $("botVPayee").textContent  = payee;
+  $("botVMemo").textContent   = memo;
+  $("botVAmount").textContent = amountStr;
+}
+
+function resetForm() {
+  ["payee","amount","checknum","amountWords","memo"].forEach(id => $(id).value = "");
+  $("date").value = new Date().toISOString().slice(0,10);
+  update();
+}
+
+["date","payee","amount","checknum","amountWords","memo"].forEach(id => {
+  const el = $(id);
+  el.addEventListener("input", update);
+  el.addEventListener("change", update);
+});
+
+$("date").value = new Date().toISOString().slice(0,10);
+update();
+</script>
+
+</body>
+</html>
