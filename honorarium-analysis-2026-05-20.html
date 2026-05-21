@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Karmê Chöling Honorarium Models</title>
+<style>
+:root {
+  --bg: #ffffff;
+  --fg: #2a2a2a;
+  --muted: #6a6f76;
+  --line: #ececec;
+  --line-strong: #d4d4d4;
+  --accent: #6b8e9e;
+  --teacher-color: #a17e5f;
+  --kcl-color: #6b8e9e;
+  --soft-blue: #eef3f5;
+  --soft-green: #eef5ef;
+  --soft-amber: #faf3e6;
+  --soft-rose: #f6efeb;
+  --row-alt: #fafbfb;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--fg);
+  font-size: 15px;
+  line-height: 1.55;
+}
+.wrap { max-width: 1280px; margin: 0 auto; padding: 32px 48px 60px; }
+h1 { font-size: 24px; margin: 0 0 4px; font-weight: 600; letter-spacing: -0.01em; }
+.subtitle { color: var(--muted); margin: 0 0 28px; font-size: 14px; }
+h2 { font-size: 17px; margin: 38px 0 12px; font-weight: 600; color: #333; }
+h3 { font-size: 14px; margin: 18px 0 8px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
+p { margin: 8px 0 14px; }
+ul { margin: 8px 0 14px; padding-left: 22px; }
+li { margin: 4px 0; }
+
+.callouts {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 16px;
+  margin: 8px 0 28px;
+}
+.callout {
+  padding: 16px 20px;
+  border-radius: 6px;
+  font-size: 14px;
+}
+.callout.blue { background: var(--soft-blue); }
+.callout.green { background: var(--soft-green); }
+.callout.amber { background: var(--soft-amber); }
+.callout .big { font-size: 22px; font-weight: 600; color: #2a3a48; display: block; margin-bottom: 4px; }
+.callout .label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
+
+table { border-collapse: collapse; width: 100%; margin: 10px 0 22px; font-size: 14px; }
+th, td { padding: 8px 12px; text-align: left; border-bottom: 1px solid var(--line); }
+th {
+  font-weight: 500;
+  color: var(--muted);
+  font-size: 13px;
+  border-bottom: 1px solid var(--line-strong);
+}
+table.zebra tbody tr:nth-child(even) { background: var(--row-alt); }
+.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.totals-row { font-weight: 600; background: #f4f6f7 !important; border-top: 1.5px solid var(--line-strong); }
+.figure { margin: 18px 0 28px; }
+.caption { color: var(--muted); font-size: 13px; margin-top: 6px; }
+.tag { display: inline-block; padding: 1px 7px; border-radius: 3px; font-size: 11px; background: #ecf0f2; color: #4d6470; margin-left: 4px; vertical-align: 1px; }
+.tag.cap { background: #faf3e6; color: #8a6d2a; }
+
+.option-summary {
+  background: var(--soft-blue);
+  border-radius: 6px;
+  padding: 18px 22px;
+  margin: 8px 0 26px;
+}
+.option-summary table { margin: 0; font-size: 14.5px; }
+.option-summary th { background: transparent; color: #4d6470; }
+.option-summary td { border-bottom: 1px solid #e1e8ec; }
+
+/* Winners-by-context table */
+.who-wins {
+  margin: 12px 0 28px;
+}
+.who-wins table th {
+  background: transparent;
+}
+.who-wins .teacher-winner { color: var(--teacher-color); font-weight: 600; }
+.who-wins .kcl-winner { color: var(--kcl-color); font-weight: 600; }
+
+.legend-key {
+  display: inline-flex; gap: 18px; margin: 0 0 8px;
+  font-size: 13px; color: var(--muted);
+}
+.legend-key .sw {
+  display: inline-block; width: 10px; height: 10px; border-radius: 2px;
+  margin-right: 6px; vertical-align: 0;
+}
+.sw.teacher { background: var(--teacher-color); }
+.sw.kcl { background: var(--kcl-color); }
+
+.matrix-header-row td { font-weight: 600; }
+
+@media print {
+  .wrap { padding: 12pt; max-width: none; }
+  table { page-break-inside: auto; }
+  tr { page-break-inside: avoid; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>Karmê Chöling Honorarium Models</h1>
+<p class="subtitle">30 most-recent residential paid programs · May 2025 – May 2026 · revenue side only (2026-05-20)</p>
+
+<div class="callouts">
+<div class="callout blue">
+<span class="label">Sample revenue</span>
+<span class="big">$319k</span>
+$218k net tuition + $101k room &amp; board · 30 programs · 433 attendees
+</div>
+<div class="callout green">
+<span class="label">Capacity</span>
+<span class="big">1 at cap · 4 near cap</span>
+44 tent overflow attendees across 10 programs (concentrated in summer)
+</div>
+<div class="callout amber">
+<span class="label">Discount load</span>
+<span class="big">4.5% of gross tuition</span>
+35 of 340 paying attendees received any discount
+</div>
+</div>
+
+<h2>Six honorarium models aggregate impact across 30 programs</h2>
+
+<div class="option-summary">
+<table>
+<thead><tr>
+<th>Model</th><th>Structure</th>
+<th class="num">Total honoraria<br>(30 programs)</th>
+<th class="num">KCL net of honoraria<br>(USD)</th>
+<th class="num">Avg per program<br>(USD)</th>
+<th class="num">Median<br>(USD)</th>
+<th class="num">Std dev<br>(USD)</th>
+</tr></thead><tbody>
+<tr><td><strong>Floor</strong></td><td>$1,000 flat per program</td>
+<td class="num">$30k</td>
+<td class="num">$289k</td>
+<td class="num">$1,000</td>
+<td class="num">$1,000</td>
+<td class="num">$0</td></tr><tr><td><strong>P30</strong></td><td>30% of net tuition</td>
+<td class="num">$65k</td>
+<td class="num">$254k</td>
+<td class="num">$2,200</td>
+<td class="num">$1,500</td>
+<td class="num">$2,500</td></tr><tr><td><strong>Base+25</strong></td><td>$100/night + 25% of net tuition</td>
+<td class="num">$70k</td>
+<td class="num">$249k</td>
+<td class="num">$2,300</td>
+<td class="num">$1,700</td>
+<td class="num">$2,400</td></tr><tr><td><strong>Hybrid</strong></td><td>$75/night + 30% of net tuition</td>
+<td class="num">$77k</td>
+<td class="num">$242k</td>
+<td class="num">$2,600</td>
+<td class="num">$1,900</td>
+<td class="num">$2,700</td></tr><tr><td><strong>SrBase+25</strong></td><td>$150/night + 25% of net tuition</td>
+<td class="num">$78k</td>
+<td class="num">$241k</td>
+<td class="num">$2,600</td>
+<td class="num">$2,000</td>
+<td class="num">$2,500</td></tr><tr><td><strong>P50</strong></td><td>50% of net tuition</td>
+<td class="num">$109k</td>
+<td class="num">$210k</td>
+<td class="num">$3,600</td>
+<td class="num">$2,400</td>
+<td class="num">$4,200</td></tr></tbody></table></div>
+<div class="figure">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 360" width="100%" style="background:#fff;"><text x="540.0" y="20" font-size="14" fill="#3a4a5c" text-anchor="middle" font-weight="600">Total honoraria across 30 programs, by model</text><line x1="80" x2="1030" y1="260.0" y2="260.0" stroke="#eef0f2"/><text x="70" y="264.0" font-size="11" fill="#7a8088" text-anchor="end">$0k</text><line x1="80" x2="1030" y1="223.33333333333334" y2="223.33333333333334" stroke="#eef0f2"/><text x="70" y="227.33333333333334" font-size="11" fill="#7a8088" text-anchor="end">$25k</text><line x1="80" x2="1030" y1="186.66666666666669" y2="186.66666666666669" stroke="#eef0f2"/><text x="70" y="190.66666666666669" font-size="11" fill="#7a8088" text-anchor="end">$50k</text><line x1="80" x2="1030" y1="150.0" y2="150.0" stroke="#eef0f2"/><text x="70" y="154.0" font-size="11" fill="#7a8088" text-anchor="end">$75k</text><line x1="80" x2="1030" y1="113.33333333333334" y2="113.33333333333334" stroke="#eef0f2"/><text x="70" y="117.33333333333334" font-size="11" fill="#7a8088" text-anchor="end">$100k</text><line x1="80" x2="1030" y1="76.66666666666666" y2="76.66666666666666" stroke="#eef0f2"/><text x="70" y="80.66666666666666" font-size="11" fill="#7a8088" text-anchor="end">$125k</text><line x1="80" x2="1030" y1="40.0" y2="40.0" stroke="#eef0f2"/><text x="70" y="44.0" font-size="11" fill="#7a8088" text-anchor="end">$150k</text><line x1="80" x2="1030" y1="260" y2="260" stroke="#c8cdd2"/><text x="20" y="150.0" font-size="12" fill="#3a4a5c" transform="rotate(-90,20,150.0)" text-anchor="middle">Total honoraria paid (USD, 30 programs)</text><text x="555.0" y="348" font-size="12" fill="#3a4a5c" text-anchor="middle">Honorarium model (sorted lowest to highest total cost)</text><polyline points="159.2,216.0 317.5,164.1 475.8,157.1 634.2,146.9 792.5,145.6 950.8,100.2" fill="none" stroke="#6b8e9e" stroke-width="2.6"/><circle cx="159.2" cy="216.0" r="5" fill="#6b8e9e"/><text x="159.2" y="204.0" font-size="13" fill="#3a4a5c" text-anchor="middle" font-weight="600">$30k</text><text x="159.2" y="282" font-size="13" fill="#3a4a5c" text-anchor="middle" font-weight="600">Floor</text><text x="159.2" y="300" font-size="11" fill="#7a8088" text-anchor="middle">$1,000 flat per program</text><circle cx="317.5" cy="164.1" r="5" fill="#6b8e9e"/><text x="317.5" y="152.1" font-size="13" fill="#3a4a5c" text-anchor="middle" font-weight="600">$65k</text><text x="317.5" y="282" font-size="13" fill="#3a4a5c" text-anchor="middle" font-weight="600">P30</text><text x="317.5" y="300" font-size="11" fill="#7a8088" text-anchor="middle">30% of net tuition</text><circle cx="475.8" cy="157.1" r="5" fill="#6b8e9e"/><text x="475.8" y="145.1" font-size="13" fill="#3a4a5c" text-anchor="middle" font-weight="600">$70k</text><text x="475.8" y="282" font-size="13" fill="#3a4a5c" text-anchor="middle" font-weight="600">Base+25</text><text x="475.8" y="300" font-size="11" fill="#7a8088" text-anchor="middle">$100/night + 25% of net tuition</text><circle cx="634.2" cy="146.9" r="5" fill="#6b8e9e"/><text x="634.2" y="134.9" font-size="13" fill="#3a4a5c" text-anchor="middle" font-weight="600">$77k</text><text x="634.2" y="282" font-size="13" fill="#3a4a5c" text-anchor="middle" font-weight="600">Hybrid</text><text x="634.2" y="300" font-size="11" fill="#7a8088" text-anchor="middle">$75/night + 30% of net tuition</text><circle cx="792.5" cy="145.6" r="5" fill="#6b8e9e"/><text x="792.5" y="133.6" font-size="13" fill="#3a4a5c" text-anchor="middle" font-weight="600">$78k</text><text x="792.5" y="282" font-size="13" fill="#3a4a5c" text-anchor="middle" font-weight="600">SrBase+25</text><text x="792.5" y="300" font-size="11" fill="#7a8088" text-anchor="middle">$150/night + 25% of net tuition</text><circle cx="950.8" cy="100.2" r="5" fill="#6b8e9e"/><text x="950.8" y="88.2" font-size="13" fill="#3a4a5c" text-anchor="middle" font-weight="600">$109k</text><text x="950.8" y="282" font-size="13" fill="#3a4a5c" text-anchor="middle" font-weight="600">P50</text><text x="950.8" y="300" font-size="11" fill="#7a8088" text-anchor="middle">50% of net tuition</text></svg>
+<div class="caption">KCL net = (net tuition + room &amp; board) − honoraria. Operating costs (food, staff, utilities, overhead) are not subtracted.</div>
+</div>
+
+<h2>Which model pays whom, in which context</h2>
+
+<p>Every model produces a different honorarium depending on program length and tuition revenue. The
+table below groups the 30 programs into archetypes and shows the median honorarium each model would
+have paid, with the highest (best for the teacher) and lowest (cheapest for KCL) highlighted per row.</p>
+
+<div class="legend-key">
+<span><span class="sw teacher"></span>Best for teacher (highest median honorarium for that archetype)</span>
+<span><span class="sw kcl"></span>Cheapest for KCL (lowest median honorarium for that archetype)</span>
+</div>
+
+<div class="who-wins">
+<table>
+<thead><tr>
+<th>Program archetype</th>
+<th class="num">N</th>
+<th class="num">Avg nights</th>
+<th class="num">Avg arrived</th><th class="num">Floor</th><th class="num">P30</th><th class="num">Base+25</th><th class="num">Hybrid</th><th class="num">SrBase+25</th><th class="num">P50</th></tr></thead><tbody><tr><td>Small weekend workshop</td>
+<td class="num">8</td>
+<td class="num">2.1</td>
+<td class="num">8.0</td><td class="num teacher-winner">$1,000</td><td class="num kcl-winner">$500</td><td class="num ">$600</td><td class="num ">$700</td><td class="num ">$700</td><td class="num ">$900</td></tr><tr><td>Standard weekend workshop</td>
+<td class="num">6</td>
+<td class="num">2.0</td>
+<td class="num">15.7</td><td class="num ">$1,000</td><td class="num kcl-winner">$1,000</td><td class="num ">$1,000</td><td class="num ">$1,100</td><td class="num ">$1,100</td><td class="num teacher-winner">$1,600</td></tr><tr><td>High-draw short</td>
+<td class="num">2</td>
+<td class="num">2.5</td>
+<td class="num">36.5</td><td class="num kcl-winner">$1,000</td><td class="num ">$3,500</td><td class="num ">$3,100</td><td class="num ">$3,700</td><td class="num ">$3,300</td><td class="num teacher-winner">$5,800</td></tr><tr><td>Mid-length retreat (5–9 nights)</td>
+<td class="num">5</td>
+<td class="num">5.8</td>
+<td class="num">17.8</td><td class="num kcl-winner">$1,000</td><td class="num ">$3,500</td><td class="num ">$3,500</td><td class="num ">$3,900</td><td class="num ">$3,700</td><td class="num teacher-winner">$5,900</td></tr><tr><td>Mid-length, low fill</td>
+<td class="num">5</td>
+<td class="num">6.4</td>
+<td class="num">8.8</td><td class="num kcl-winner">$1,000</td><td class="num ">$1,500</td><td class="num ">$1,800</td><td class="num ">$1,900</td><td class="num ">$2,100</td><td class="num teacher-winner">$2,600</td></tr><tr><td>Long retreat (10+ nights)</td>
+<td class="num">3</td>
+<td class="num">18.0</td>
+<td class="num">8.0</td><td class="num kcl-winner">$1,000</td><td class="num ">$2,000</td><td class="num ">$3,000</td><td class="num ">$3,000</td><td class="num teacher-winner">$3,600</td><td class="num ">$3,400</td></tr><tr><td>Family Camp</td>
+<td class="num">1</td>
+<td class="num">8.0</td>
+<td class="num">45.0</td><td class="num kcl-winner">$1,000</td><td class="num ">$13k</td><td class="num ">$12k</td><td class="num ">$14k</td><td class="num ">$12k</td><td class="num teacher-winner">$22k</td></tr></tbody></table></div>
+<h3>How to read this</h3>
+<ul>
+<li><strong>Floor ($1,000 flat)</strong> is the most teacher-favoring model for small weekend workshops
+(median attended &lt; 12), where any percentage-based model would yield less than $1,000. It is the
+cheapest for KCL on every other archetype — long retreats, mid-length programs, and high-draw events
+all generate enough net tuition that a flat $1k is the smallest payout among the six models.</li>
+
+<li><strong>P30 (30% of net tuition)</strong> and <strong>P50 (50%)</strong> scale with tuition revenue
+and have no floor. They reward high-enrollment programs and pay almost nothing for small or low-fill ones.
+P50 is the most teacher-favoring model in 22 of 30 programs (any program with non-trivial net tuition).
+P30 is the cheapest for KCL on 11 of 30 programs — exactly the high-revenue, short-duration ones where
+the absence of a per-night base helps KCL most.</li>
+
+<li><strong>Base+25 ($100/night + 25%)</strong> and <strong>P30</strong> cross over at the threshold
+<em>net tuition &gt; $2,000 × nights</em>. Below that threshold (24 of 30 programs in this sample),
+Base+25 pays the teacher more; above it (6 of 30, including Family Camp, Medicine Buddha with Anyen
+Rinpoche, and the 7-Day Meditation Retreat), P30 pays more. In aggregate the six "above-threshold"
+programs are heavy enough to flip the total: P30 pays $65k
+total vs. Base+25 at $70k — P30 is cheaper by $4,800.</li>
+
+<li><strong>SrBase+25 ($150/night + 25%)</strong> is identical to Base+25 plus $50/night. It only
+matters for long retreats — the Month-Long Meditation Retreat (27 nights) pays the teacher
+$4,000 more under SrBase+25 than Base+25; weekend workshops
+gain only $100. This is the structural lever for "pay senior teachers proportionally to commitment."</li>
+
+<li><strong>Hybrid ($75/night + 30%)</strong> is almost identical to a weighted blend of Base+25 and P30.
+It pays slightly more than Base+25 across the board and is teacher-favoring on most archetypes
+without the volatility of P50.</li>
+</ul>
+
+<h3>Reading by stakeholder</h3>
+<ul>
+<li><strong>For senior teachers running flagship programs</strong> (Medicine Buddha, Month-Long Retreat,
+Shambhala Training): P50 pays the most, SrBase+25 second. Floor pays meaningfully less than any
+percentage-based model. If the policy goal is to compensate senior teachers proportionally to draw,
+Floor is structurally wrong for this archetype.</li>
+
+<li><strong>For new or low-draw teachers running small workshops</strong> (Kyudo, Tai Chi, small weekend
+workshops): Floor pays $1,000 regardless. Every percentage-based model pays less than $1,000 for these
+programs — sometimes much less ($250–$700). If the policy goal is to make small programs viable for
+the teacher, Floor or a floor-with-percentage-bonus structure is the only structurally fair option.</li>
+
+<li><strong>For Karmê Chöling as institution</strong>: Floor minimizes total honoraria
+($30k aggregate) but leaves senior teachers underpaid.
+P50 maximizes them ($109k) and may not be sustainable without
+operational cost data. Base+25 and Hybrid sit in the middle — Base+25 has the lowest std dev of
+the percentage-based models, meaning its per-program payouts are the most predictable to budget.</li>
+
+<li><strong>For Family Camp specifically</strong>: this single program drives a spread of
+$21k
+across the six models — P50 would pay $22k,
+Floor would pay $1,000. Whatever uniform policy
+is adopted, Family Camp is the program where the dollar consequence is largest and most worth
+discussing separately.</li>
+</ul>
+
+<h2>Enrollment sensitivity — Base+25 model</h2>
+<div class="figure">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 340" width="100%" style="background:#fff;"><text x="540.0" y="20" font-size="14" fill="#3a4a5c" text-anchor="middle" font-weight="600">KCL revenue net of honoraria under enrollment scenarios — Base+25 model</text><line x1="90" x2="1020" y1="250.0" y2="250.0" stroke="#eef0f2"/><text x="80" y="254.0" font-size="11" fill="#7a8088" text-anchor="end">$0k</text><line x1="90" x2="1020" y1="208.0" y2="208.0" stroke="#eef0f2"/><text x="80" y="212.0" font-size="11" fill="#7a8088" text-anchor="end">$100k</text><line x1="90" x2="1020" y1="166.0" y2="166.0" stroke="#eef0f2"/><text x="80" y="170.0" font-size="11" fill="#7a8088" text-anchor="end">$200k</text><line x1="90" x2="1020" y1="124.0" y2="124.0" stroke="#eef0f2"/><text x="80" y="128.0" font-size="11" fill="#7a8088" text-anchor="end">$300k</text><line x1="90" x2="1020" y1="82.0" y2="82.0" stroke="#eef0f2"/><text x="80" y="86.0" font-size="11" fill="#7a8088" text-anchor="end">$400k</text><line x1="90" x2="1020" y1="40.0" y2="40.0" stroke="#eef0f2"/><text x="80" y="44.0" font-size="11" fill="#7a8088" text-anchor="end">$500k</text><line x1="90" x2="1020" y1="250" y2="250" stroke="#c8cdd2"/><text x="22" y="145.0" font-size="12" fill="#3a4a5c" transform="rotate(-90,22,145.0)" text-anchor="middle">KCL revenue net of honoraria (USD)</text><text x="555.0" y="328" font-size="12" fill="#3a4a5c" text-anchor="middle">Enrollment scenario (relative to actual)</text><polyline points="206.2,173.3 438.8,145.5 671.2,117.7 903.8,90.0" fill="none" stroke="#6b8e9e" stroke-width="2.6"/><circle cx="206.2" cy="173.3" r="5" fill="#6b8e9e"/><text x="206.2" y="161.3" font-size="13" fill="#3a4a5c" text-anchor="middle" font-weight="600">$183k</text><text x="206.2" y="272" font-size="13" fill="#3a4a5c" text-anchor="middle" font-weight="600">-25%</text><text x="206.2" y="290" font-size="11" fill="#7a8088" text-anchor="middle">net tuition $163k</text><circle cx="438.8" cy="145.5" r="5" fill="#6b8e9e"/><text x="438.8" y="133.5" font-size="13" fill="#3a4a5c" text-anchor="middle" font-weight="600">$249k</text><text x="438.8" y="272" font-size="13" fill="#3a4a5c" text-anchor="middle" font-weight="600">flat</text><text x="438.8" y="290" font-size="11" fill="#7a8088" text-anchor="middle">net tuition $218k</text><circle cx="671.2" cy="117.7" r="5" fill="#6b8e9e"/><text x="671.2" y="105.7" font-size="13" fill="#3a4a5c" text-anchor="middle" font-weight="600">$315k</text><text x="671.2" y="272" font-size="13" fill="#3a4a5c" text-anchor="middle" font-weight="600">+25%</text><text x="671.2" y="290" font-size="11" fill="#7a8088" text-anchor="middle">net tuition $272k</text><circle cx="903.8" cy="90.0" r="5" fill="#6b8e9e"/><text x="903.8" y="78.0" font-size="13" fill="#3a4a5c" text-anchor="middle" font-weight="600">$381k</text><text x="903.8" y="272" font-size="13" fill="#3a4a5c" text-anchor="middle" font-weight="600">+50%</text><text x="903.8" y="290" font-size="11" fill="#7a8088" text-anchor="middle">net tuition $327k</text></svg>
+<div class="caption">Tuition and room &amp; board scale with enrollment; the $100/night base is fixed
+regardless of headcount. The fixed base creates slightly-better-than-linear upside scaling.</div>
+</div>
+
+<h2>Registration timing</h2>
+<div class="figure">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 380" width="100%" style="background:#fff;"><text x="540.0" y="20" font-size="14" fill="#3a4a5c" text-anchor="middle" font-weight="600">Registration buildup over time</text><line x1="80" x2="1050" y1="310.0" y2="310.0" stroke="#eef0f2"/><text x="70" y="314.0" font-size="11" fill="#7a8088" text-anchor="end">0%</text><line x1="80" x2="1050" y1="253.75" y2="253.75" stroke="#eef0f2"/><text x="70" y="257.75" font-size="11" fill="#7a8088" text-anchor="end">25%</text><line x1="80" x2="1050" y1="197.49999999999997" y2="197.49999999999997" stroke="#eef0f2"/><text x="70" y="201.49999999999997" font-size="11" fill="#7a8088" text-anchor="end">50%</text><line x1="80" x2="1050" y1="141.25" y2="141.25" stroke="#eef0f2"/><text x="70" y="145.25" font-size="11" fill="#7a8088" text-anchor="end">75%</text><line x1="80" x2="1050" y1="85.0" y2="85.0" stroke="#eef0f2"/><text x="70" y="89.0" font-size="11" fill="#7a8088" text-anchor="end">100%</text><line x1="80" x2="1050" y1="310" y2="310" stroke="#c8cdd2"/><line x1="80.0" x2="80.0" y1="310" y2="315" stroke="#c8cdd2"/><text x="80.0" y="329" font-size="11" fill="#7a8088" text-anchor="middle">T−90</text><line x1="403.33333333333337" x2="403.33333333333337" y1="310" y2="315" stroke="#c8cdd2"/><text x="403.33333333333337" y="329" font-size="11" fill="#7a8088" text-anchor="middle">T−60</text><line x1="726.6666666666667" x2="726.6666666666667" y1="310" y2="315" stroke="#c8cdd2"/><text x="726.6666666666667" y="329" font-size="11" fill="#7a8088" text-anchor="middle">T−30</text><line x1="899.1111111111111" x2="899.1111111111111" y1="310" y2="315" stroke="#c8cdd2"/><text x="899.1111111111111" y="329" font-size="11" fill="#7a8088" text-anchor="middle">T−14</text><line x1="974.5555555555557" x2="974.5555555555557" y1="310" y2="315" stroke="#c8cdd2"/><text x="974.5555555555557" y="329" font-size="11" fill="#7a8088" text-anchor="middle">T−7</text><line x1="1050.0" x2="1050.0" y1="310" y2="315" stroke="#c8cdd2"/><text x="1050.0" y="329" font-size="11" fill="#7a8088" text-anchor="middle">Start</text><text x="565.0" y="368" font-size="12" fill="#3a4a5c" text-anchor="middle">Days before program start</text><text x="20" y="175.0" font-size="12" fill="#3a4a5c" transform="rotate(-90,20,175.0)" text-anchor="middle">Active registrations (% of final arrived)</text><polyline points="80.0,291.2 403.3,253.8 726.7,197.5 899.1,103.8 974.6,103.8 1050.0,85.0" fill="none" stroke="#cdd6dc" stroke-width="1"/><polyline points="80.0,245.7 403.3,213.6 726.7,149.3 899.1,52.9 974.6,52.9 1050.0,85.0" fill="none" stroke="#cdd6dc" stroke-width="1"/><polyline points="80.0,220.0 403.3,175.0 726.7,85.0 899.1,40.0 974.6,40.0 1050.0,40.0" fill="none" stroke="#cdd6dc" stroke-width="1"/><polyline points="80.0,310.0 403.3,272.5 726.7,235.0 899.1,160.0 974.6,47.5 1050.0,85.0" fill="none" stroke="#cdd6dc" stroke-width="1"/><polyline points="80.0,130.0 403.3,120.0 726.7,95.0 899.1,100.0 974.6,45.0 1050.0,55.0" fill="none" stroke="#cdd6dc" stroke-width="1"/><polyline points="80.0,235.0 403.3,235.0 726.7,85.0 899.1,40.0 974.6,40.0 1050.0,40.0" fill="none" stroke="#cdd6dc" stroke-width="1"/><polyline points="80.0,256.4 403.3,208.2 726.7,192.1 899.1,154.6 974.6,101.1 1050.0,85.0" fill="none" stroke="#cdd6dc" stroke-width="1"/><polyline points="80.0,175.0 403.3,160.0 726.7,115.0 899.1,70.0 974.6,55.0 1050.0,70.0" fill="none" stroke="#cdd6dc" stroke-width="1"/><polyline points="80.0,40.0 403.3,40.0 726.7,40.0 899.1,40.0 974.6,40.0 1050.0,40.0" fill="none" stroke="#cdd6dc" stroke-width="1"/><polyline points="80.0,280.0 403.3,250.0 726.7,190.0 899.1,160.0 974.6,130.0 1050.0,85.0" fill="none" stroke="#cdd6dc" stroke-width="1"/><polyline points="80.0,272.5 403.3,253.8 726.7,122.5 899.1,66.2 974.6,47.5 1050.0,66.2" fill="none" stroke="#cdd6dc" stroke-width="1"/><polyline points="80.0,169.4 403.3,40.0 726.7,40.0 899.1,40.0 974.6,40.0 1050.0,40.0" fill="none" stroke="#cdd6dc" stroke-width="1"/><polyline points="80.0,285.0 403.3,260.0 726.7,210.0 899.1,110.0 974.6,85.0 1050.0,110.0" fill="none" stroke="#cdd6dc" stroke-width="1"/><polyline points="80.0,310.0 403.3,269.1 726.7,146.4 899.1,125.9 974.6,85.0 1050.0,64.5" fill="none" stroke="#cdd6dc" stroke-width="1"/><polyline points="80.0,258.9 403.3,238.4 726.7,187.3 899.1,115.7 974.6,105.5 1050.0,74.8" fill="none" stroke="#cdd6dc" stroke-width="1"/><polyline points="80.0,295.0 403.3,160.0 726.7,145.0 899.1,115.0 974.6,100.0 1050.0,70.0" fill="none" stroke="#cdd6dc" stroke-width="1"/><polyline points="80.0,272.5 403.3,122.5 726.7,40.0 899.1,40.0 974.6,40.0 1050.0,40.0" fill="none" stroke="#cdd6dc" stroke-width="1"/><polyline points="80.0,298.8 403.3,197.5 726.7,130.0 899.1,130.0 974.6,107.5 1050.0,73.8" fill="none" stroke="#cdd6dc" stroke-width="1"/><polyline points="80.0,310.0 403.3,310.0 726.7,197.5 899.1,101.1 974.6,68.9 1050.0,85.0" fill="none" stroke="#cdd6dc" stroke-width="1"/><polyline points="80.0,310.0 403.3,270.3 726.7,190.9 899.1,98.2 974.6,71.8 1050.0,58.5" fill="none" stroke="#cdd6dc" stroke-width="1"/><polyline points="80.0,310.0 403.3,242.5 726.7,197.5 899.1,175.0 974.6,107.5 1050.0,62.5" fill="none" stroke="#cdd6dc" stroke-width="1"/><polyline points="80.0,281.9 403.3,211.6 726.7,141.2 899.1,127.2 974.6,85.0 1050.0,85.0" fill="none" stroke="#cdd6dc" stroke-width="1"/><polyline points="80.0,285.0 403.3,260.0 726.7,185.0 899.1,147.5 974.6,97.5 1050.0,85.0" fill="none" stroke="#cdd6dc" stroke-width="1"/><polyline points="80.0,285.0 403.3,185.0 726.7,110.0 899.1,60.0 974.6,85.0 1050.0,110.0" fill="none" stroke="#cdd6dc" stroke-width="1"/><polyline points="80.0,287.5 403.3,265.0 726.7,175.0 899.1,175.0 974.6,130.0 1050.0,62.5" fill="none" stroke="#cdd6dc" stroke-width="1"/><polyline points="80.0,258.9 403.3,248.6 726.7,146.4 899.1,105.5 974.6,74.8 1050.0,85.0" fill="none" stroke="#cdd6dc" stroke-width="1"/><polyline points="80.0,169.4 403.3,169.4 726.7,113.1 899.1,113.1 974.6,40.0 1050.0,56.9" fill="none" stroke="#cdd6dc" stroke-width="1"/><polyline points="80.0,220.0 403.3,175.0 726.7,175.0 899.1,85.0 974.6,40.0 1050.0,40.0" fill="none" stroke="#cdd6dc" stroke-width="1"/><polyline points="80.0,277.9 403.3,277.9 726.7,245.7 899.1,149.3 974.6,40.0 1050.0,85.0" fill="none" stroke="#cdd6dc" stroke-width="1"/><polyline points="80.0,310.0 403.3,288.2 726.7,208.4 899.1,172.1 974.6,128.5 1050.0,77.7" fill="none" stroke="#cdd6dc" stroke-width="1"/><polyline points="80.0,247.6 403.3,204.0 726.7,142.2 899.1,103.2 974.6,69.9 1050.0,63.2" fill="none" stroke="#6b8e9e" stroke-width="2.6"/><circle cx="80.0" cy="247.6" r="3.5" fill="#6b8e9e"/><text x="80.0" y="237.6" font-size="11" fill="#3a4a5c" text-anchor="middle" font-weight="600">28%</text><circle cx="403.3" cy="204.0" r="3.5" fill="#6b8e9e"/><text x="403.3" y="194.0" font-size="11" fill="#3a4a5c" text-anchor="middle" font-weight="600">47%</text><circle cx="726.7" cy="142.2" r="3.5" fill="#6b8e9e"/><text x="726.7" y="132.2" font-size="11" fill="#3a4a5c" text-anchor="middle" font-weight="600">75%</text><circle cx="899.1" cy="103.2" r="3.5" fill="#6b8e9e"/><text x="899.1" y="93.2" font-size="11" fill="#3a4a5c" text-anchor="middle" font-weight="600">92%</text><circle cx="974.6" cy="69.9" r="3.5" fill="#6b8e9e"/><text x="974.6" y="59.9" font-size="11" fill="#3a4a5c" text-anchor="middle" font-weight="600">107%</text><circle cx="1050.0" cy="63.2" r="3.5" fill="#6b8e9e"/><text x="1050.0" y="53.2" font-size="11" fill="#3a4a5c" text-anchor="middle" font-weight="600">110%</text><rect x="860" y="44" width="200" height="44" fill="white" stroke="#c8cdd2"/><line x1="870" x2="892" y1="60" y2="60" stroke="#6b8e9e" stroke-width="2.6"/><text x="898" y="64" font-size="12" fill="#3a4a5c">Sample aggregate (n=30)</text><line x1="870" x2="892" y1="78" y2="78" stroke="#cdd6dc" stroke-width="1"/><text x="898" y="82" font-size="12" fill="#3a4a5c">Individual programs</text></svg>
+<div class="caption">By T−30 (30 days before start), the typical program is at 75% of
+its eventual headcount; by T−14, 92%. T−14 is the tighter empirical signal for
+the "will this program hit ≥8 final attendees" cancellation decision.</div>
+</div>
+
+<h2>Per-program honoraria across all six models</h2>
+<table class="zebra">
+<thead><tr>
+<th>Program</th><th>Start</th>
+<th class="num">Nights</th><th class="num">Arrived</th>
+<th class="num">Net tuition<br>(USD)</th>
+<th class="num">R&amp;B<br>(USD)</th><th class="num">Floor<br>(USD)</th><th class="num">P30<br>(USD)</th><th class="num">Base+25<br>(USD)</th><th class="num">Hybrid<br>(USD)</th><th class="num">SrBase+25<br>(USD)</th><th class="num">P50<br>(USD)</th><th class="num">Spread<br>(max − min)</th></tr></thead><tbody><tr><td>Kyudo for Beginners</td>
+<td>2025-06-27</td>
+<td class="num">2</td>
+<td class="num">12</td>
+<td class="num">$2,000</td>
+<td class="num">$1,000</td><td class="num">$1,000</td><td class="num">$600</td><td class="num">$700</td><td class="num">$800</td><td class="num">$800</td><td class="num">$1,000</td><td class="num">$400</td></tr><tr><td>Finding Clarity of Mind in Nature </td>
+<td>2025-06-27</td>
+<td class="num">2</td>
+<td class="num">7</td>
+<td class="num">$1,400</td>
+<td class="num">$700</td><td class="num">$1,000</td><td class="num">$400</td><td class="num">$600</td><td class="num">$600</td><td class="num">$700</td><td class="num">$700</td><td class="num">$600</td></tr><tr><td>Women&#x27;s Kyudo Retreat</td>
+<td>2025-07-03</td>
+<td class="num">3</td>
+<td class="num">10</td>
+<td class="num">$3,600</td>
+<td class="num">$1,100</td><td class="num">$1,000</td><td class="num">$1,100</td><td class="num">$1,200</td><td class="num">$1,300</td><td class="num">$1,300</td><td class="num">$1,800</td><td class="num">$800</td></tr><tr><td>Seasons of Energy - Tai Chi Chuan </td>
+<td>2025-07-18</td>
+<td class="num">2</td>
+<td class="num">6</td>
+<td class="num">$1,100</td>
+<td class="num">$1,400</td><td class="num">$1,000</td><td class="num">$300</td><td class="num">$500</td><td class="num">$500</td><td class="num">$600</td><td class="num">$600</td><td class="num">$700</td></tr><tr><td>Family Camp 2025 <span class="tag">near cap</span></td>
+<td>2025-07-26</td>
+<td class="num">8</td>
+<td class="num">45</td>
+<td class="num">$44k</td>
+<td class="num">$5,100</td><td class="num">$1,000</td><td class="num">$13k</td><td class="num">$12k</td><td class="num">$14k</td><td class="num">$12k</td><td class="num">$22k</td><td class="num">$21k</td></tr><tr><td>2nd Two-Week Meditation Retreat</td>
+<td>2025-08-22</td>
+<td class="num">14</td>
+<td class="num">3</td>
+<td class="num">$3,200</td>
+<td class="num">$1,500</td><td class="num">$1,000</td><td class="num">$1,000</td><td class="num">$2,200</td><td class="num">$2,000</td><td class="num">$2,900</td><td class="num">$1,600</td><td class="num">$1,900</td></tr><tr><td>Medicine Buddha with Anyen Rinpoche <span class="tag cap">at cap</span></td>
+<td>2025-08-28</td>
+<td class="num">3</td>
+<td class="num">42</td>
+<td class="num">$16k</td>
+<td class="num">$4,900</td><td class="num">$1,000</td><td class="num">$4,700</td><td class="num">$4,200</td><td class="num">$4,900</td><td class="num">$4,300</td><td class="num">$7,800</td><td class="num">$6,800</td></tr><tr><td>Kado - Ikebana</td>
+<td>2025-09-05</td>
+<td class="num">5</td>
+<td class="num">15</td>
+<td class="num">$7,200</td>
+<td class="num">$1,800</td><td class="num">$1,000</td><td class="num">$2,200</td><td class="num">$2,300</td><td class="num">$2,500</td><td class="num">$2,600</td><td class="num">$3,600</td><td class="num">$2,600</td></tr><tr><td>The Fullness of Being</td>
+<td>2025-09-26</td>
+<td class="num">5</td>
+<td class="num">8</td>
+<td class="num">$4,800</td>
+<td class="num">$2,800</td><td class="num">$1,000</td><td class="num">$1,500</td><td class="num">$1,700</td><td class="num">$1,800</td><td class="num">$2,000</td><td class="num">$2,400</td><td class="num">$1,400</td></tr><tr><td>Mudra Space Awareness</td>
+<td>2025-10-10</td>
+<td class="num">2</td>
+<td class="num">15</td>
+<td class="num">$3,100</td>
+<td class="num">$2,400</td><td class="num">$1,000</td><td class="num">$900</td><td class="num">$1,000</td><td class="num">$1,100</td><td class="num">$1,100</td><td class="num">$1,600</td><td class="num">$600</td></tr><tr><td>Silent Simplicity: A Meditation Retreat</td>
+<td>2025-10-24</td>
+<td class="num">2</td>
+<td class="num">12</td>
+<td class="num">$1,800</td>
+<td class="num">$1,700</td><td class="num">$1,000</td><td class="num">$600</td><td class="num">$700</td><td class="num">$700</td><td class="num">$800</td><td class="num">$900</td><td class="num">$400</td></tr><tr><td>Ngöndro Practice Retreat</td>
+<td>2025-10-31</td>
+<td class="num">7</td>
+<td class="num">8</td>
+<td class="num">$5,300</td>
+<td class="num">$2,200</td><td class="num">$1,000</td><td class="num">$1,600</td><td class="num">$2,000</td><td class="num">$2,100</td><td class="num">$2,400</td><td class="num">$2,600</td><td class="num">$1,600</td></tr><tr><td>Three Pillars of Self-Care Series</td>
+<td>2025-11-14</td>
+<td class="num">5</td>
+<td class="num">9</td>
+<td class="num">$5,200</td>
+<td class="num">$1,900</td><td class="num">$1,000</td><td class="num">$1,500</td><td class="num">$1,800</td><td class="num">$1,900</td><td class="num">$2,000</td><td class="num">$2,600</td><td class="num">$1,600</td></tr><tr><td>Qigong Levels 1-2</td>
+<td>2025-11-14</td>
+<td class="num">2</td>
+<td class="num">11</td>
+<td class="num">$3,100</td>
+<td class="num">$1,600</td><td class="num">$1,000</td><td class="num">$900</td><td class="num">$1,000</td><td class="num">$1,100</td><td class="num">$1,100</td><td class="num">$1,500</td><td class="num">$600</td></tr><tr><td>Mahamudra Stepping Stones <span class="tag">near cap</span></td>
+<td>2025-11-20</td>
+<td class="num">5</td>
+<td class="num">22</td>
+<td class="num">$12k</td>
+<td class="num">$7,100</td><td class="num">$1,000</td><td class="num">$3,500</td><td class="num">$3,500</td><td class="num">$3,900</td><td class="num">$3,700</td><td class="num">$5,900</td><td class="num">$4,900</td></tr><tr><td>Month-Long Meditation Retreat</td>
+<td>2025-12-29</td>
+<td class="num">27</td>
+<td class="num">15</td>
+<td class="num">$20k</td>
+<td class="num">$23k</td><td class="num">$1,000</td><td class="num">$6,000</td><td class="num">$7,700</td><td class="num">$8,100</td><td class="num">$9,100</td><td class="num">$10k</td><td class="num">$9,100</td></tr><tr><td>2-Week Meditation Retreat</td>
+<td>2025-12-29</td>
+<td class="num">13</td>
+<td class="num">6</td>
+<td class="num">$6,800</td>
+<td class="num">$2,800</td><td class="num">$1,000</td><td class="num">$2,000</td><td class="num">$3,000</td><td class="num">$3,000</td><td class="num">$3,600</td><td class="num">$3,400</td><td class="num">$2,600</td></tr><tr><td>7-Day Meditation Retreat <span class="tag">near cap</span></td>
+<td>2025-12-29</td>
+<td class="num">6</td>
+<td class="num">20</td>
+<td class="num">$16k</td>
+<td class="num">$7,600</td><td class="num">$1,000</td><td class="num">$4,700</td><td class="num">$4,500</td><td class="num">$5,100</td><td class="num">$4,800</td><td class="num">$7,800</td><td class="num">$6,800</td></tr><tr><td>Caring for Body &amp; Mind: Part II</td>
+<td>2026-01-16</td>
+<td class="num">5</td>
+<td class="num">14</td>
+<td class="num">$8,400</td>
+<td class="num">$4,000</td><td class="num">$1,000</td><td class="num">$2,500</td><td class="num">$2,600</td><td class="num">$2,900</td><td class="num">$2,800</td><td class="num">$4,200</td><td class="num">$3,200</td></tr><tr><td>Silent Simplicity Meditation Retreat</td>
+<td>2026-02-20</td>
+<td class="num">2</td>
+<td class="num">17</td>
+<td class="num">$3,400</td>
+<td class="num">$2,200</td><td class="num">$1,000</td><td class="num">$1,000</td><td class="num">$1,000</td><td class="num">$1,200</td><td class="num">$1,100</td><td class="num">$1,700</td><td class="num">$700</td></tr><tr><td>Silent Simplicity Meditation</td>
+<td>2026-03-20</td>
+<td class="num">9</td>
+<td class="num">10</td>
+<td class="num">$9,500</td>
+<td class="num">$4,600</td><td class="num">$1,000</td><td class="num">$2,900</td><td class="num">$3,300</td><td class="num">$3,500</td><td class="num">$3,700</td><td class="num">$4,800</td><td class="num">$3,800</td></tr><tr><td>The Sadhana of Mahamudra</td>
+<td>2026-04-03</td>
+<td class="num">2</td>
+<td class="num">16</td>
+<td class="num">$3,800</td>
+<td class="num">$2,500</td><td class="num">$1,000</td><td class="num">$1,200</td><td class="num">$1,200</td><td class="num">$1,300</td><td class="num">$1,300</td><td class="num">$1,900</td><td class="num">$900</td></tr><tr><td>Shambhala Training Levels 1 – 5</td>
+<td>2026-04-10</td>
+<td class="num">8</td>
+<td class="num">18</td>
+<td class="num">$13k</td>
+<td class="num">$5,500</td><td class="num">$1,000</td><td class="num">$3,800</td><td class="num">$3,900</td><td class="num">$4,400</td><td class="num">$4,300</td><td class="num">$6,300</td><td class="num">$5,300</td></tr><tr><td>Heart of Recovery</td>
+<td>2026-04-24</td>
+<td class="num">6</td>
+<td class="num">9</td>
+<td class="num">$4,800</td>
+<td class="num">$3,000</td><td class="num">$1,000</td><td class="num">$1,500</td><td class="num">$1,800</td><td class="num">$1,900</td><td class="num">$2,100</td><td class="num">$2,400</td><td class="num">$1,400</td></tr><tr><td>Heart of Recovery</td>
+<td>2026-04-24</td>
+<td class="num">2</td>
+<td class="num">10</td>
+<td class="num">$2,400</td>
+<td class="num">$2,100</td><td class="num">$1,000</td><td class="num">$700</td><td class="num">$800</td><td class="num">$900</td><td class="num">$900</td><td class="num">$1,200</td><td class="num">$500</td></tr><tr><td>Qigong Levels 1-2</td>
+<td>2026-05-01</td>
+<td class="num">2</td>
+<td class="num">22</td>
+<td class="num">$5,700</td>
+<td class="num">$2,500</td><td class="num">$1,000</td><td class="num">$1,700</td><td class="num">$1,600</td><td class="num">$1,900</td><td class="num">$1,700</td><td class="num">$2,800</td><td class="num">$1,800</td></tr><tr><td>Qigong: Level 3</td>
+<td>2026-05-03</td>
+<td class="num">2</td>
+<td class="num">8</td>
+<td class="num">$1,800</td>
+<td class="num">$700</td><td class="num">$1,000</td><td class="num">$500</td><td class="num">$600</td><td class="num">$700</td><td class="num">$700</td><td class="num">$900</td><td class="num">$500</td></tr><tr><td>Qigong: Level 4</td>
+<td>2026-05-05</td>
+<td class="num">2</td>
+<td class="num">5</td>
+<td class="num">$700</td>
+<td class="num">$400</td><td class="num">$1,000</td><td class="num">$200</td><td class="num">$400</td><td class="num">$400</td><td class="num">$500</td><td class="num">$400</td><td class="num">$800</td></tr><tr><td>Qigong: Level 5</td>
+<td>2026-05-07</td>
+<td class="num">2</td>
+<td class="num">7</td>
+<td class="num">$1,800</td>
+<td class="num">$400</td><td class="num">$1,000</td><td class="num">$500</td><td class="num">$600</td><td class="num">$700</td><td class="num">$700</td><td class="num">$900</td><td class="num">$500</td></tr><tr><td>Working with Fear &amp; Awakening Compassion <span class="tag">near cap</span></td>
+<td>2026-05-08</td>
+<td class="num">2</td>
+<td class="num">31</td>
+<td class="num">$7,600</td>
+<td class="num">$2,800</td><td class="num">$1,000</td><td class="num">$2,300</td><td class="num">$2,100</td><td class="num">$2,400</td><td class="num">$2,200</td><td class="num">$3,800</td><td class="num">$2,800</td></tr><tr class="totals-row"><td>Totals (30 programs)</td><td>—</td><td class="num">157</td><td class="num">433</td><td class="num">$218k</td><td class="num">$101k</td><td class="num">$30k</td><td class="num">$65k</td><td class="num">$70k</td><td class="num">$77k</td><td class="num">$78k</td><td class="num">$109k</td><td class="num">$79k</td></tr></tbody></table>
+<h2>Notes</h2>
+<ul>
+<li><strong>Sample.</strong> 30 most-recent residential paid programs (PROG_CATEGORY_CODE='REG',
+PROG_PRICE&gt;$100, ≥3 arrived; online and test programs excluded). Spans 2025-05-09 to 2026-05-10.
+Length 2–27 nights; arrivals 3–45.</li>
+<li><strong>Net tuition</strong> = gross PROG charges − all discount lines and discount-flagged
+payments (includes program-staff comps at 100% discount). <strong>R&amp;B</strong> = net ACCO charges
+bucketed by room type (KCL_*/AB* → on-site; PLATFORM/TENT/CAB T → tent; COMMUTE → commuter).</li>
+<li><strong>Paying attendees</strong> (340 of 433) excludes 93
+program-staff registrations, which consume room/kitchen but pay no tuition.</li>
+<li><strong>KCL net</strong> = (net tuition + R&amp;B) − honorarium. Operating costs (food, staff
+labor, utilities, overhead) are out of scope. This is revenue available <em>before</em> operating
+costs, not profit.</li>
+<li><strong>Floor pass.</strong> All 30 of 30 programs pass the conservative floor (honorarium
+≤ net tuition). The binding constraint is operational cost, which is outside available data.</li>
+<li><strong>Capacity classifier.</strong> Accommodation type uses seasonal room codes (CAB T S,
+TENTSING, OTENTINC, PLATFORM) so tent overflow is correctly counted. Tent inventory concentrates
+in summer: Family Camp 2025 (25 in tents) and Medicine Buddha with Anyen Rinpoche (7) account
+for the majority.</li>
+<li><strong>Archetype assignment.</strong> Programs are grouped by length, headcount, and on-site
+room count using thresholds applied uniformly: small workshop (≤3 nights, &lt;12 arrived); standard
+weekend (≤3 nights, ≥12); high-draw short (≥30 arrived in ≤4 nights, or ≥20 on-site rooms);
+mid-length retreat (5–9 nights, ≥12 arrived); mid-length low fill (5–9 nights, &lt;12 arrived);
+long retreat (≥10 nights); Family Camp (matched by name).</li>
+</ul>
+
+</div>
+</body>
+</html>
