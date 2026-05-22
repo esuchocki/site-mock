@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>How echeck batches get into Omnis</title>
+<style>
+:root {
+  --bg: #ffffff; --fg: #2a2a2a; --muted: #6a6f76;
+  --line: #ececec; --line-strong: #d4d4d4;
+  --accent: #3a4a5c; --gold: #c9a227; --warn: #a45f5f; --ok: #5a8a6b;
+  --soft-blue: #eef3f5; --soft-gold: #fffaeb; --soft-warn: #f9efee; --soft-ok: #eef5ef;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  background: var(--bg); color: var(--fg);
+  font-size: 14.5px; line-height: 1.55;
+}
+.wrap { max-width: 980px; margin: 0 auto; padding: 32px 48px 60px; }
+h1 { font-size: 22px; margin: 0 0 4px; font-weight: 600; }
+.subtitle { color: var(--muted); margin: 0 0 24px; font-size: 13px; }
+h2 { font-size: 16px; margin: 36px 0 12px; font-weight: 600; color: #333; text-transform: uppercase; letter-spacing: 0.04em; }
+p { margin: 6px 0 12px; }
+
+.tldr {
+  background: var(--soft-blue); border-left: 4px solid var(--accent);
+  padding: 16px 22px; margin: 12px 0 28px; border-radius: 4px;
+}
+.tldr strong { color: var(--accent); }
+
+.flow {
+  background: #fafafa; border: 1px solid var(--line);
+  padding: 16px 20px; margin: 14px 0 24px; border-radius: 4px;
+}
+.flow-step {
+  display: grid; grid-template-columns: 48px 1fr;
+  gap: 14px; padding: 10px 0;
+  border-bottom: 1px dashed var(--line);
+}
+.flow-step:last-child { border-bottom: none; }
+.flow-step .num {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: var(--accent); color: white;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 600; font-size: 15px;
+}
+.flow-step .body .title { font-weight: 600; color: #2a3a48; margin-bottom: 2px; }
+.flow-step .body .detail { font-size: 13.5px; color: #444; }
+.flow-step .body .evidence { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+.callout {
+  background: var(--soft-gold); border-left: 4px solid var(--gold);
+  padding: 14px 18px; margin: 12px 0 22px; border-radius: 4px;
+  font-size: 14px;
+}
+.callout strong { color: #8a6d2a; }
+
+.q-block {
+  background: white; border: 1px solid var(--line);
+  border-radius: 4px; padding: 16px 20px; margin: 14px 0;
+}
+.q-block .q { font-size: 15px; font-weight: 600; color: var(--accent); margin-bottom: 8px; }
+.q-block .a { font-size: 14px; color: #2a2a2a; }
+.q-block .a p { margin: 4px 0 8px; }
+.q-block .a ul { margin: 4px 0 8px 0; padding-left: 22px; }
+
+table { border-collapse: collapse; width: 100%; margin: 8px 0 22px; font-size: 13px; }
+th, td { padding: 7px 10px; text-align: left; border-bottom: 1px solid var(--line); }
+th { font-weight: 500; color: var(--muted); font-size: 12px; border-bottom: 1px solid var(--line-strong); background: #fafafa; }
+
+ul.checklist { list-style: none; padding-left: 0; margin: 6px 0 14px; }
+ul.checklist li { padding: 5px 0 5px 26px; position: relative; }
+ul.checklist li::before { content: "☐"; position: absolute; left: 4px; color: var(--accent); font-size: 16px; }
+
+.code { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 13px; background: #f0f0f0; padding: 1px 5px; border-radius: 2px; }
+
+@media print { .wrap { padding: 12pt; max-width: none; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>How echeck batches get into Omnis</h1>
+<p class="subtitle">Companion to the $1,746.39 reconciliation · prepared 2026-05-22</p>
+
+<div class="tldr">
+<strong>The short version:</strong> Karmê Chöling's recurring monthly donations are debited from donors' bank accounts via ACH (the system calls them AWD — Automatic Withdrawal). On the 22nd of each month, a staff member runs a script in Omnis that <strong>creates the payment records in advance</strong> based on each donor's recurring-donation profile. The bank then processes the actual ACH debits over the next 8 days, and any that fail get voided in Omnis on the same day they were created. The net amount the bank deposits to KCL's account on or about the 1st of the following month is the gross batch total minus failed echecks minus the bank's processing fee.
+</div>
+
+<h2>The data trail in Omnis</h2>
+
+<p>Every one of the 47 AWD payment rows on 2026-04-30 has the same fingerprints:</p>
+
+<div class="flow">
+<div class="flow-step">
+<div class="num">1</div>
+<div class="body">
+<div class="title">All 47 rows were created by user <span class="code">spagan</span></div>
+<div class="detail">Single operator initiated the batch.</div>
+<div class="evidence">USR_CREATED = "spagan" across all 47 rows</div>
+</div>
+</div>
+
+<div class="flow-step">
+<div class="num">2</div>
+<div class="body">
+<div class="title">All 47 rows were created within a 101-second window</div>
+<div class="detail">2026-04-22 19:42:17 to 19:43:58 — about 1.7 minutes. This is the signature of a script-driven bulk insert, not manual data entry.</div>
+<div class="evidence">MIN(DATE_CREATED) = 2026-04-22 19:42:17 · MAX = 2026-04-22 19:43:58 · 47 inserts</div>
+</div>
+</div>
+
+<div class="flow-step">
+<div class="num">3</div>
+<div class="body">
+<div class="title">Source host was the Omnis client, modifications came from the web server</div>
+<div class="detail">HOST_CREATED is the Omnis desktop client at 69.54.28.13. HOST_MODIFIED is the web app at 172.99.75.224. The records were originally written through Omnis Studio, then later touched (probably the void flags on the 9 failed rows) through the web interface.</div>
+<div class="evidence">HOST_CREATED = "kcl_omnis_user@69.54.28.13" · HOST_MODIFIED = "kcl_web@172.99.75.224"</div>
+</div>
+</div>
+
+<div class="flow-step">
+<div class="num">4</div>
+<div class="body">
+<div class="title">Each payment row is linked to an underlying donation record</div>
+<div class="detail">The 38 successful AWD payments each reference a <span class="code">DONATION_ID</span> in the donation table. Those donation records all have <span class="code">DONATION_TYPE = "MONTHLY"</span> and contain detailed notes about when each donor signed up and changed their monthly amount over the years. Most originated years ago (some at "Scorpion Seal 1&2 Fundraiser" or earlier events).</div>
+<div class="evidence">Example: PAYMENT 250375 → DONATION 28489 (Virginia Adams, $20/month, originally $15 in 2012, increased over time)</div>
+</div>
+</div>
+
+<div class="flow-step">
+<div class="num">5</div>
+<div class="body">
+<div class="title">Voided rows (failed echecks) were voided on the same day they were created</div>
+<div class="detail">All 9 voided rows have VOID_TRANSACTION = 2026-04-22 — the same date as creation. This suggests the failures were detected immediately by the ACH processor's pre-batch validation (bad routing/account, closed account, etc.), not after the bank tried to settle them. The CC_AUTHO codes (E-X, E2-2, E3-128, E9-99) appear to be the processor's reason codes.</div>
+<div class="evidence">All voided rows: VOID_TRANSACTION = "2026-04-22" = DATE_CREATED date</div>
+</div>
+</div>
+</div>
+
+<h2>Your two questions, directly</h2>
+
+<div class="q-block">
+<div class="q">1. How did this get into Omnis?</div>
+<div class="a">
+<p>A staff member (logged in as <span class="code">spagan</span>) ran an Omnis routine on 2026-04-22 that:</p>
+<ul>
+<li>Read each active monthly-donor profile from the donation table (DONATION_TYPE = "MONTHLY")</li>
+<li>Created a new <span class="code">payment</span> record for each one, dated forward to 2026-04-30 (the intended settlement date)</li>
+<li>Coded the payment as <span class="code">PAYMENT_CAT = "AWD"</span> (Automatic withdrawal)</li>
+<li>Tied each payment to the corresponding donation record via <span class="code">payment_detail.DONATION_ID</span></li>
+<li>Submitted the batch file to the bank/ACH processor</li>
+</ul>
+<p>The 9 failures came back during processor pre-validation. Whoever runs this batch went into Omnis the same day, marked those 9 rows as voided, and noted the processor's reason code in CC_AUTHO. The remaining 38 went through to settlement.</p>
+<p>This is a recurring monthly process — you'll see a similar batch on the same date pattern every month, going back years.</p>
+</div>
+</div>
+
+<div class="q-block">
+<div class="q">2. Where do we get the bank statement to reconcile?</div>
+<div class="a">
+<p>Omnis does not contain the bank-side record. The actual deposit confirmation and processing fee details live in the ACH processor's reporting interface, NOT in Omnis. Likely sources:</p>
+<ul>
+<li><strong>The ACH processor's portal.</strong> Common ACH/echeck processors used by small nonprofits include Authorize.net eCheck.Net, Stripe ACH, Bluepay, JackHenry/iPay, or a bank-direct ACH service. The processor's portal will have a batch report dated 2026-04-30 showing: gross batch total, per-item fees, batch fee, returns/NSFs, and the net deposit amount that was funded to KCL's bank account on or about 2026-05-01.</li>
+<li><strong>Karmê Chöling's bank statement.</strong> Look at the bank statement for the account that received the $1,746.39. The deposit line item will have a reference (often called an "ACH credit memo" or "merchant deposit") that includes the processor name and batch identifier. The bank statement won't show the breakdown, but it confirms the net number.</li>
+<li><strong>Email confirmation from the processor.</strong> Most ACH processors send a daily or per-batch settlement email. Search Karmê Chöling's email accounts (especially shared finance/bookkeeping inboxes) for "ACH", "echeck", "settlement", "batch", or the processor's name, around 2026-04-22 (batch submission) or 2026-04-30 to 2026-05-02 (settlement).</li>
+</ul>
+<p>The fastest path: find who set up the AWD/echeck flow originally. The <span class="code">spagan</span> user account that submitted the batch is your starting point — that person knows which processor KCL uses.</p>
+</div>
+</div>
+
+<div class="callout">
+<strong>This data is "sort of backwards" because Omnis is the SOURCE-OF-INTENT, not the source-of-truth.</strong> Omnis says "here are the 47 echecks we asked the bank to process." The bank says "here is what we actually moved." Reconciling the two requires reading both. KCL has historically relied on the Omnis intent record, but the bank's actual deposit history is the authoritative financial record.
+</div>
+
+<h2>What the "Clearing Process - Echeck" should capture</h2>
+
+<p>For each monthly AWD batch, you'll want to record:</p>
+
+<table>
+<thead><tr><th>Field</th><th>Source</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td>Batch submission date</td><td>Omnis DATE_CREATED on the AWD payment rows</td><td>2026-04-22</td></tr>
+<tr><td>Batch intended settlement date</td><td>Omnis PAYMENT_DATE</td><td>2026-04-30</td></tr>
+<tr><td>Gross batch (submitted)</td><td>Sum of all AWD payment_detail amounts for that batch</td><td>$3,183.00</td></tr>
+<tr><td>Failed / returned amount</td><td>Sum of voided rows</td><td>$1,390.00</td></tr>
+<tr><td>Settled gross</td><td>Gross − failed</td><td>$1,793.00</td></tr>
+<tr><td>Processor fee</td><td>From processor portal / bank statement</td><td>$46.61 (inferred)</td></tr>
+<tr><td>Net deposit to bank</td><td>From bank statement</td><td>$1,746.39</td></tr>
+<tr><td>Bank deposit date</td><td>From bank statement</td><td>2026-05-01 (likely)</td></tr>
+<tr><td>Processor reference</td><td>ACH batch ID from processor</td><td>(to be found)</td></tr>
+</tbody>
+</table>
+
+<h2>Suggested workflow for the new "Clearing Process - Echeck"</h2>
+
+<ul class="checklist">
+<li>Each month after the AWD batch runs in Omnis (around the 22nd), pull the list of AWD payments with PAYMENT_DATE = the upcoming month-end.</li>
+<li>When the processor settlement report arrives, save it alongside the Omnis batch list.</li>
+<li>Reconcile: total settled in processor matches total non-voided in Omnis. Investigate any mismatch.</li>
+<li>Book the gross donation revenue (e.g., $1,793.00 to GL 4810/4820 by donor designation).</li>
+<li>Book the processor fee as a separate expense (e.g., $46.61 to GL 6110 Bank Services Fee).</li>
+<li>Confirm the net amount ($1,746.39) matches the bank deposit on the bank statement.</li>
+<li>Follow up with the failed donors so the $1,390 of intended monthly support is recovered or rescheduled.</li>
+</ul>
+
+<p style="font-size:13px; color:var(--muted); margin-top:24px;">Companion report: <span class="code">ach_batch_reconciliation.html</span> in the same folder has the full per-donor breakdown of the 38 settled and 9 failed echecks.</p>
+
+</div>
+</body>
+</html>
