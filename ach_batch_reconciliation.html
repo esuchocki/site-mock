@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Karmê Chöling — $1,746.39 ACH Batch Reconciliation</title>
+<style>
+:root {
+  --bg: #ffffff; --fg: #2a2a2a; --muted: #6a6f76;
+  --line: #ececec; --line-strong: #d4d4d4;
+  --accent: #3a4a5c; --gold: #c9a227; --warn: #a45f5f; --ok: #5a8a6b;
+  --soft-blue: #eef3f5; --soft-gold: #fffaeb; --soft-warn: #f9efee; --soft-ok: #eef5ef;
+  --row-alt: #fafbfb;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  background: var(--bg); color: var(--fg);
+  font-size: 14.5px; line-height: 1.55;
+}
+.wrap { max-width: 1080px; margin: 0 auto; padding: 32px 48px 60px; }
+h1 { font-size: 24px; margin: 0 0 4px; font-weight: 600; }
+.subtitle { color: var(--muted); margin: 0 0 24px; font-size: 13px; }
+h2 { font-size: 16px; margin: 36px 0 12px; font-weight: 600; color: #333; text-transform: uppercase; letter-spacing: 0.04em; }
+p { margin: 6px 0 12px; max-width: 900px; }
+
+.summary-card {
+  background: var(--soft-blue);
+  border-left: 4px solid var(--accent);
+  padding: 18px 22px; margin: 12px 0 28px;
+  border-radius: 4px;
+}
+.summary-card .headline { font-size: 19px; font-weight: 600; color: var(--accent); margin-bottom: 8px; }
+.summary-card .conclusion { font-size: 14.5px; }
+
+.math-flow {
+  background: #fafafa; border: 1px solid var(--line);
+  padding: 16px 20px; margin: 14px 0 24px;
+  border-radius: 4px;
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 13.5px;
+}
+.math-flow .row { display: grid; grid-template-columns: 1fr max-content; gap: 16px; padding: 4px 0; }
+.math-flow .row.subtract { color: var(--warn); }
+.math-flow .row.result { padding-top: 8px; margin-top: 6px; border-top: 1px solid var(--line-strong); font-weight: 600; color: var(--ok); }
+.math-flow .lab { color: #444; }
+.math-flow .val { text-align: right; font-variant-numeric: tabular-nums; }
+
+.kpi-row {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 14px; margin: 12px 0 28px;
+}
+.kpi { padding: 14px 18px; border-radius: 6px; border-left: 4px solid; }
+.kpi.gold { background: var(--soft-gold); border-left-color: var(--gold); }
+.kpi.warn { background: var(--soft-warn); border-left-color: var(--warn); }
+.kpi.ok { background: var(--soft-ok); border-left-color: var(--ok); }
+.kpi .label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
+.kpi .name { font-size: 13px; font-weight: 600; color: #2a3a48; margin: 4px 0 6px; }
+.kpi .big { font-size: 22px; font-weight: 600; color: #2a3a48; display: block; }
+.kpi .sub { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+table { border-collapse: collapse; width: 100%; margin: 8px 0 22px; font-size: 13px; }
+th, td { padding: 6px 10px; text-align: left; border-bottom: 1px solid var(--line); }
+th { font-weight: 500; color: var(--muted); font-size: 12px; border-bottom: 1px solid var(--line-strong); background: #fafafa; }
+table.zebra tbody tr:nth-child(even) { background: var(--row-alt); }
+.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.totals-row { font-weight: 600; background: #f0f4f8 !important; border-top: 1.5px solid var(--line-strong); }
+
+ul.findings { margin: 6px 0 16px; padding-left: 20px; }
+ul.findings li { margin: 4px 0; }
+
+.evidence-block {
+  background: #fafafa; padding: 12px 16px; margin: 8px 0 16px;
+  border-left: 3px solid var(--line-strong); border-radius: 3px;
+  font-size: 13px;
+}
+.evidence-block .key { font-weight: 600; color: #444; }
+
+@media print { .wrap { padding: 12pt; max-width: none; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>$1,746.39 ACH Deposit — Reconciliation</h1>
+<p class="subtitle">Batch dated 2026-04-30 · investigation prepared 2026-05-22</p>
+
+<div class="summary-card">
+<div class="headline">The $1,746.39 deposit is the net settlement of a monthly recurring-donation echeck batch.</div>
+<div class="conclusion">38 donors had their automatic monthly donations debited on 2026-04-30 via ACH/echeck, totaling $1,793.00 gross. The bank's ACH processing fee of approximately $46.61 was deducted before the funds reached Karmê Chöling's account, leaving a net deposit of $1,746.39. An additional 9 echecks in the same batch failed and were voided on 2026-04-22 before settlement — they are tracked separately in Omnis but never reached the bank.</div>
+</div>
+
+<h2>The math</h2>
+
+<div class="math-flow">
+<div class="row"><span class="lab">38 successful AWD donor debits (sum of payment_detail amounts)</span><span class="val">+ $1,793.00</span></div>
+<div class="row subtract"><span class="lab">Inferred bank ACH processing fee (gross − net deposit)</span><span class="val">− $46.61</span></div>
+<div class="row result"><span class="lab">Net deposit to Karmê Chöling's bank account</span><span class="val">= $1,746.39</span></div>
+</div>
+
+<p>The inferred fee of $46.61 works out to $1.23 per echeck across 38 transactions — within the normal range for ACH per-item processing fees (typically $0.50–$1.50 per item, plus optional small batch fees).</p>
+
+<div class="kpi-row">
+<div class="kpi ok">
+<div class="label">Settled</div>
+<div class="name">38 echecks</div>
+<span class="big">$1,793.00</span>
+<div class="sub">empty CC_AUTHO field · no void</div>
+</div>
+<div class="kpi warn">
+<div class="label">Failed / returned</div>
+<div class="name">9 echecks</div>
+<span class="big">$1,390.00</span>
+<div class="sub">marked voided 2026-04-22 · never reached bank</div>
+</div>
+<div class="kpi gold">
+<div class="label">Net deposited</div>
+<div class="name">After bank fees</div>
+<span class="big">$1,746.39</span>
+<div class="sub">$46.61 fee inferred ($1.23/echeck)</div>
+</div>
+</div>
+
+<h2>What we observed in Omnis</h2>
+
+<div class="evidence-block">
+<div><span class="key">Payment category:</span> AWD ("Automatic withdrawal" — the closest match to ACH/echeck in the system)</div>
+<div><span class="key">Payment date:</span> 2026-04-30 (date assigned to the entire batch)</div>
+<div><span class="key">Created in Omnis:</span> 2026-04-22 (batch was queued ~8 days before bank settlement)</div>
+<div><span class="key">Total rows in batch:</span> 47 (38 settled + 9 voided)</div>
+<div><span class="key">Voided rows:</span> All 9 voided rows have a code in CC_AUTHO (E-X, E2-2, E3-128, E9-99) and VOID_TRANSACTION = 2026-04-22 — the same day they were created. This suggests the voids happened immediately, likely because the bank rejected those echecks (insufficient funds, closed account, or pre-batch validation failure).</div>
+<div><span class="key">Settled rows:</span> All 38 settled rows have empty CC_AUTHO and NULL VOID_TRANSACTION — indicating no exception flag.</div>
+</div>
+
+<h2>The 38 successful debits (settled)</h2>
+
+<table class="zebra">
+<thead><tr><th>Donor</th><th>Email</th><th class="num">Amount</th></tr></thead>
+<tbody>
+<tr>
+<td>Janet Romaine</td>
+<td>jromaine@anselm.edu</td>
+<td class="num">$250.00</td>
+</tr><tr>
+<td>Peter Spano</td>
+<td>pb_spano@hotmail.com</td>
+<td class="num">$150.00</td>
+</tr><tr>
+<td>Bob Stevens</td>
+<td>bob@growthinsight.com</td>
+<td class="num">$100.00</td>
+</tr><tr>
+<td>Erika Wilton</td>
+<td>erikazw@gmail.com</td>
+<td class="num">$100.00</td>
+</tr><tr>
+<td>Hill Anderson</td>
+<td>hillanderson@gmail.com</td>
+<td class="num">$100.00</td>
+</tr><tr>
+<td>Mark Bianchi</td>
+<td>mbcho60@comcast.net</td>
+<td class="num">$100.00</td>
+</tr><tr>
+<td>Roger Guest</td>
+<td>aptraining@yahoo.com</td>
+<td class="num">$100.00</td>
+</tr><tr>
+<td>Scott Perry</td>
+<td>raymondsperry@gmail.com</td>
+<td class="num">$55.00</td>
+</tr><tr>
+<td>Dan Danielsen</td>
+<td>d.danielsen@northeastern.edu</td>
+<td class="num">$50.00</td>
+</tr><tr>
+<td>Eric Spiegel</td>
+<td>emirror@yahoo.com</td>
+<td class="num">$50.00</td>
+</tr><tr>
+<td>Janet Bronstein</td>
+<td>janetmbronstein@gmail.com</td>
+<td class="num">$50.00</td>
+</tr><tr>
+<td>Kevin Walsh</td>
+<td>kevinwalsh947@gmail.com</td>
+<td class="num">$50.00</td>
+</tr><tr>
+<td>Arawana Hayashi</td>
+<td>arawanahayashi@gmail.com</td>
+<td class="num">$40.00</td>
+</tr><tr>
+<td>Mary Elizabeth Furr</td>
+<td>mbfurr@gmail.com</td>
+<td class="num">$40.00</td>
+</tr><tr>
+<td>Merle Thompson</td>
+<td>lungtamerle@gmail.com</td>
+<td class="num">$40.00</td>
+</tr><tr>
+<td>Mona Barbera</td>
+<td>monarbarbera@gmail.com</td>
+<td class="num">$40.00</td>
+</tr><tr>
+<td>Claire Twose</td>
+<td>ctwose@verizon.net</td>
+<td class="num">$35.00</td>
+</tr><tr>
+<td>Karen Monahan</td>
+<td>karen.m.monahan13@gmail.com</td>
+<td class="num">$30.00</td>
+</tr><tr>
+<td>Steven Daniels</td>
+<td>stevensattva@gmail.com</td>
+<td class="num">$30.00</td>
+</tr><tr>
+<td>Barbara Wolkowitz</td>
+<td>barbarawolkowitz@gmail.com</td>
+<td class="num">$25.00</td>
+</tr><tr>
+<td>Celeste Budwit-Hunter</td>
+<td>budwithunter@gmail.com</td>
+<td class="num">$25.00</td>
+</tr><tr>
+<td>Connie Brock</td>
+<td>brock108108@gmail.com</td>
+<td class="num">$25.00</td>
+</tr><tr>
+<td>Kenneth Williford</td>
+<td>kenwilliford@gmail.com</td>
+<td class="num">$25.00</td>
+</tr><tr>
+<td>Larry Wolf</td>
+<td>larrywolf51@gmail.com</td>
+<td class="num">$25.00</td>
+</tr><tr>
+<td>Linda Montone</td>
+<td>geisha_grl1@yahoo.com</td>
+<td class="num">$25.00</td>
+</tr><tr>
+<td>Mary Lang</td>
+<td>marystuartlang@gmail.com</td>
+<td class="num">$25.00</td>
+</tr><tr>
+<td>Brian Sutton</td>
+<td>brsutton@hotmail.com</td>
+<td class="num">$20.00</td>
+</tr><tr>
+<td>Marcelene R Celiz</td>
+<td>marceleneceliz@gmail.com</td>
+<td class="num">$20.00</td>
+</tr><tr>
+<td>Robin J Sutherland</td>
+<td>robinsutherland@charter.net</td>
+<td class="num">$20.00</td>
+</tr><tr>
+<td>Sara Hand</td>
+<td>slhand2@gmail.com</td>
+<td class="num">$20.00</td>
+</tr><tr>
+<td>Virginia Adams</td>
+<td>vhadams@comcast.net</td>
+<td class="num">$20.00</td>
+</tr><tr>
+<td>Catherine Yates</td>
+<td>katherinedyates@gmail.com</td>
+<td class="num">$18.00</td>
+</tr><tr>
+<td>Debra Drexler</td>
+<td>deb55drex@gmail.com</td>
+<td class="num">$15.00</td>
+</tr><tr>
+<td>Henry Mc Henry</td>
+<td>hmmchenry@ucdavis.edu</td>
+<td class="num">$15.00</td>
+</tr><tr>
+<td>Kai Yee</td>
+<td>kaicyee@verizon.net</td>
+<td class="num">$15.00</td>
+</tr><tr>
+<td>Patricia O&#x27;Brien</td>
+<td>patriciaobrien1937@gmail.com</td>
+<td class="num">$15.00</td>
+</tr><tr>
+<td>Robert O&#x27;Keefe</td>
+<td>bokbok35@gmail.com</td>
+<td class="num">$15.00</td>
+</tr><tr>
+<td>Steven Clookey</td>
+<td>steve.clookey@gmail.com</td>
+<td class="num">$15.00</td>
+</tr><tr class="totals-row">
+<td colspan="2">Gross batch total (38 settled echecks)</td>
+<td class="num">$1,793.00</td>
+</tr>
+<tr class="totals-row">
+<td colspan="2">Less: inferred bank ACH processing fee</td>
+<td class="num">−$46.61</td>
+</tr>
+<tr class="totals-row" style="background:#fffaeb !important;">
+<td colspan="2">Net deposited to Karmê Chöling</td>
+<td class="num">$1,746.39</td>
+</tr>
+</tbody>
+</table>
+
+<h2>The 9 failed / returned echecks (voided before settlement)</h2>
+
+<p>These are recurring donors whose monthly donation did not go through. They are not part of the $1,746.39 deposit and require follow-up if the donations are intended to continue.</p>
+
+<table class="zebra">
+<thead><tr><th>Donor</th><th>Email</th><th class="num">Intended amount</th><th>CC_AUTHO code</th><th>Voided</th></tr></thead>
+<tbody>
+<tr>
+<td>Daniel Dlugose</td>
+<td>lightningcub@yahoo.com</td>
+<td class="num">$1,000.00</td>
+<td>E2-2</td>
+<td>2026-04-22</td>
+</tr><tr>
+<td>Donna Stephens</td>
+<td>ddstharpa@comcast.net</td>
+<td class="num">$125.00</td>
+<td>E9-99</td>
+<td>2026-04-22</td>
+</tr><tr>
+<td>Norm Bray</td>
+<td>norm.bray@gmail.com</td>
+<td class="num">$80.00</td>
+<td>E3-128</td>
+<td>2026-04-22</td>
+</tr><tr>
+<td>Cara Thornley</td>
+<td>carathornley@gmail.com</td>
+<td class="num">$55.00</td>
+<td>E3-128</td>
+<td>2026-04-22</td>
+</tr><tr>
+<td>Jennifer Thompson</td>
+<td>jlt2855@gmail.com</td>
+<td class="num">$30.00</td>
+<td>E9-99</td>
+<td>2026-04-22</td>
+</tr><tr>
+<td>Jennifer Thompson</td>
+<td>jlt2855@gmail.com</td>
+<td class="num">$30.00</td>
+<td>E9-99</td>
+<td>2026-04-22</td>
+</tr><tr>
+<td>Patrick McGlamery</td>
+<td>patrick.mcglamery@gmail.com</td>
+<td class="num">$30.00</td>
+<td>E-X</td>
+<td>2026-04-22</td>
+</tr><tr>
+<td>Joseph Fiala</td>
+<td>joe.fiala@gmail.com</td>
+<td class="num">$20.00</td>
+<td>E3-128</td>
+<td>2026-04-22</td>
+</tr><tr>
+<td>Richard Sylvester</td>
+<td>bluelionmusic@gmail.com</td>
+<td class="num">$20.00</td>
+<td>E9-99</td>
+<td>2026-04-22</td>
+</tr><tr class="totals-row">
+<td colspan="2">Total failed / returned (not deposited)</td>
+<td class="num">$1,390.00</td>
+<td colspan="2"></td>
+</tr>
+</tbody>
+</table>
+
+<h2>What "echeck" means in this database</h2>
+
+<p>The Omnis system does not use the term "echeck" as a category code. The closest match is <strong>AWD = "Automatic withdrawal"</strong>, which is how recurring ACH/echeck debits are recorded. The payment categories in the system that touch electronic banking are:</p>
+
+<table>
+<thead><tr><th>Code</th><th>Description</th><th>Notes</th></tr></thead>
+<tbody>
+<tr><td>AWD</td><td>Automatic withdrawal</td><td>ACH/echeck. Used for the 2026-04-30 batch.</td></tr>
+<tr><td>CHECK</td><td>Check</td><td>Paper check, not ACH.</td></tr>
+<tr><td>CC</td><td>Credit Card</td><td>Authorize.net / card payment.</td></tr>
+</tbody>
+</table>
+
+<p>Wherever "echeck" appears externally (bank statement, accounting system, etc.), the corresponding records in Omnis will be AWD entries.</p>
+
+<h2>Recommended follow-up</h2>
+
+<ul class="findings">
+<li><strong>Confirm the $46.61 with the bank.</strong> If this was an ACH processing fee, it should appear on the bank statement as a separate line item near 2026-04-30 or 2026-05-01. The actual fee may differ slightly from the inferred amount; this report assumes the deposit was exactly $1,746.39 as stated.</li>
+<li><strong>Follow up with the 9 failed donors.</strong> Notable: Daniel Dlugose ($1,000), Donna Stephens ($125), Norm Bray ($80), Cara Thornley ($55). Total intended but not received: $1,390.00. These represent meaningful lost recurring revenue if uncorrected.</li>
+<li><strong>Check whether the bank fee should be coded.</strong> If the fee is real, it should be booked separately (e.g., to GL 6110 Bank Services Fee) so that the donation revenue equals the gross $1,793.00, with $46.61 expense recognized.</li>
+<li><strong>Verify the CC_AUTHO codes (E-X, E2-2, E3-128, E9-99).</strong> These may be processor reason codes for the failures (e.g., E2 = insufficient funds, E3 = invalid account). If your ACH processor publishes a reason-code map, those 9 failures can be diagnosed individually.</li>
+</ul>
+
+</div>
+</body>
+</html>
