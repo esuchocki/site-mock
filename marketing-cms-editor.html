@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Edit: Learn to Meditate · Marketing CMS · Karmê Chöling</title>
+
+<!--
+  MOCKUP NOTES (Marketing CMS authoring view, v6.2 §12):
+
+  Production URL: /admin/content/marketing/learn-to-meditate/edit
+  Engineered surface (Layer 5). Loaded only by signed-in users with
+  marketing.write permission OR admin role.
+
+  This mockup is static — clicking does not work. It shows the LAYOUT
+  Marketing staff will see while composing a page using Editor.js.
+
+  Real Editor.js is interactive:
+    - Hover between blocks → "+" appears, click to insert
+    - Hover on a block   → drag handle ⋮⋮ appears at left
+    - Click a block      → ⚙️ block tunes opens at left (popover)
+    - Select text        → inline format toolbar appears
+    - Drag a block       → reorder
+    - / in empty block   → block-type picker
+    - AI Assist panel    → docked right, Claude API for draft / alt text / voice match
+    - Save bar           → top, shows Draft/Published status
+
+  Block JSON output saved to pages.block_content (JSONB).
+  Public render reads JSON → iterates → Templ block components → server-rendered HTML
+  (see learn-to-meditate.html for what visitors load).
+-->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Crimson+Pro:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --color-bg:           #faf5ee;
+    --color-bg-warm:      #f4ead6;
+    --color-bg-canvas:    #ffffff;
+    --color-bg-admin:     #f5f0e6;
+    --color-ink:          #2a1f17;
+    --color-ink-soft:     #4a3a2a;
+    --color-ink-muted:    #6b5444;
+    --color-ink-faint:    #8a7560;
+    --color-accent:       #8b1f1f;
+    --color-accent-deep:  #6b1717;
+    --color-gold:         #b8893c;
+    --color-line:         #d4c4a8;
+    --color-line-soft:    #e6d8be;
+    --color-line-faint:   #efe5d0;
+    --color-selected:     #fff5e6;
+    --color-selected-border: #d4a356;
+    --color-success:      #5a7a3e;
+    --color-warn:         #b8893c;
+
+    --font-display: "Fraunces", Georgia, serif;
+    --font-body:    "Crimson Pro", Georgia, serif;
+    --font-ui:      "Fraunces", Georgia, serif;
+    --font-mono:    "JetBrains Mono", "SF Mono", Consolas, monospace;
+
+    --shadow-pop: 0 2px 8px rgb(42 31 23 / 0.10), 0 12px 32px rgb(42 31 23 / 0.10);
+    --shadow-pop-soft: 0 1px 4px rgb(42 31 23 / 0.08), 0 6px 18px rgb(42 31 23 / 0.06);
+    --radius: 4px;
+    --radius-sm: 2px;
+    --transition: 200ms ease;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: var(--font-body);
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--color-ink);
+    background: var(--color-bg-admin);
+    -webkit-font-smoothing: antialiased;
+    height: 100vh;
+    overflow: hidden;
+    display: grid;
+    grid-template-rows: 56px 1fr;
+  }
+
+  /* ============================================================
+     SAVE BAR — top, fixed
+     Engineered component: EditorSaveBar (v6.2 §33 Q-FCS-A2)
+     ============================================================ */
+  .save-bar {
+    background: var(--color-bg);
+    border-bottom: 1px solid var(--color-line);
+    display: flex; align-items: center;
+    padding: 0 1.25rem;
+    gap: 1rem;
+    font-family: var(--font-ui);
+    z-index: 10;
+  }
+  .save-bar__back {
+    color: var(--color-ink-soft); text-decoration: none;
+    font-size: 13px; display: flex; align-items: center; gap: 0.4rem;
+    padding: 0.4rem 0.6rem; border-radius: var(--radius-sm);
+  }
+  .save-bar__back:hover { background: var(--color-bg-warm); color: var(--color-ink); }
+  .save-bar__divider {
+    width: 1px; height: 24px; background: var(--color-line-soft);
+  }
+  .save-bar__title-block { display: flex; flex-direction: column; gap: 1px; }
+  .save-bar__path {
+    font-size: 11px; color: var(--color-ink-faint);
+    font-family: var(--font-mono);
+    letter-spacing: 0;
+  }
+  .save-bar__title {
+    font-size: 15px; color: var(--color-ink);
+    font-weight: 500;
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  .save-bar__status {
+    margin-left: auto;
+    display: flex; align-items: center; gap: 0.5rem;
+    font-size: 12px;
+    color: var(--color-ink-muted);
+    padding: 0.3rem 0.7rem;
+    background: rgb(184 137 60 / 0.12);
+    border: 1px solid rgb(184 137 60 / 0.25);
+    border-radius: 999px;
+  }
+  .save-bar__status::before {
+    content: ""; width: 6px; height: 6px;
+    background: var(--color-warn);
+    border-radius: 50%;
+  }
+  .save-bar__autosave {
+    font-size: 12px; color: var(--color-ink-faint);
+    font-style: italic;
+  }
+  .save-bar__actions { display: flex; gap: 0.5rem; align-items: center; }
+  .btn {
+    font-family: var(--font-ui);
+    font-size: 13px;
+    padding: 0.5rem 0.9rem;
+    border-radius: var(--radius);
+    border: 1px solid var(--color-line);
+    background: var(--color-bg);
+    color: var(--color-ink);
+    cursor: pointer;
+    transition: background var(--transition), border-color var(--transition);
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    text-decoration: none;
+  }
+  .btn:hover { background: var(--color-bg-warm); }
+  .btn--primary {
+    background: var(--color-accent);
+    color: var(--color-bg);
+    border-color: var(--color-accent);
+  }
+  .btn--primary:hover { background: var(--color-accent-deep); }
+  .btn--ghost { background: transparent; border-color: transparent; }
+  .btn--ghost:hover { background: var(--color-bg-warm); border-color: var(--color-line-soft); }
+
+  /* ============================================================
+     LAYOUT — three-pane
+     Left: admin nav (collapsible, here as icon rail)
+     Center: Editor.js canvas
+     Right: AI Assist panel
+     ============================================================ */
+  .workspace {
+    display: grid;
+    grid-template-columns: 64px 1fr 360px;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  /* ============================================================
+     LEFT RAIL — admin nav
+     ============================================================ */
+  .rail {
+    background: var(--color-bg);
+    border-right: 1px solid var(--color-line-soft);
+    padding: 0.75rem 0.5rem;
+    display: flex; flex-direction: column; gap: 0.25rem;
+    align-items: center;
+  }
+  .rail__item {
+    width: 40px; height: 40px;
+    display: grid; place-items: center;
+    color: var(--color-ink-muted);
+    text-decoration: none;
+    border-radius: var(--radius);
+    font-size: 18px;
+    transition: background var(--transition), color var(--transition);
+    cursor: pointer;
+    position: relative;
+  }
+  .rail__item:hover { background: var(--color-bg-warm); color: var(--color-ink); }
+  .rail__item--active {
+    background: var(--color-accent); color: var(--color-bg);
+  }
+  .rail__item--active:hover { background: var(--color-accent-deep); color: var(--color-bg); }
+  .rail__divider {
+    width: 28px; height: 1px;
+    background: var(--color-line-soft);
+    margin: 0.5rem 0;
+  }
+  .rail__profile {
+    margin-top: auto;
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: var(--color-gold);
+    display: grid; place-items: center;
+    color: var(--color-bg);
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 14px;
+  }
+
+  /* ============================================================
+     CENTER — Editor.js canvas
+     The real Editor.js library injects a contenteditable area with
+     block widgets. This mockup reproduces the visual chrome.
+     ============================================================ */
+  .canvas-area {
+    background: var(--color-bg-canvas);
+    overflow-y: auto;
+    overflow-x: hidden;
+    border-right: 1px solid var(--color-line-soft);
+  }
+  .canvas-area__inner {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 3rem 4rem 8rem;
+    position: relative;
+  }
+
+  /* Editor.js page-title row */
+  .page-title {
+    font-family: var(--font-display);
+    font-size: 36px;
+    font-weight: 400;
+    color: var(--color-ink);
+    margin: 0 0 0.5rem;
+    line-height: 1.15;
+    border: none; outline: none;
+    background: transparent;
+    width: 100%;
+  }
+  .page-slug {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--color-ink-faint);
+    margin-bottom: 2.5rem;
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  .page-slug__label {
+    text-transform: uppercase; letter-spacing: 0.1em;
+    font-family: var(--font-ui); font-size: 10px;
+    color: var(--color-ink-faint);
+    background: var(--color-bg-warm);
+    padding: 2px 6px; border-radius: 2px;
+  }
+
+  /* === EDITOR.JS BLOCK CONTAINER === */
+  .block {
+    position: relative;
+    padding: 0.5rem 0;
+    margin: 0.25rem -2rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    border-radius: var(--radius);
+    transition: background var(--transition);
+  }
+  .block:hover {
+    background: rgb(244 234 214 / 0.4);
+  }
+  .block:hover .block__handles { opacity: 1; }
+
+  /* Block left-edge handles (drag + tunes) - appear on hover */
+  .block__handles {
+    position: absolute;
+    left: -2.5rem;
+    top: 0.7rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    opacity: 0;
+    transition: opacity var(--transition);
+  }
+  .block__handle {
+    width: 24px; height: 24px;
+    display: grid; place-items: center;
+    color: var(--color-ink-faint);
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+    font-size: 12px;
+  }
+  .block__handle:hover { background: var(--color-bg-warm); color: var(--color-ink); }
+  .block__handle--drag {
+    cursor: grab;
+    line-height: 1; letter-spacing: -2px;
+  }
+
+  /* SELECTED block — shows handles always, plus subtle ring */
+  .block--selected {
+    background: var(--color-selected);
+  }
+  .block--selected .block__handles { opacity: 1; }
+  .block--selected::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 2px;
+    background: var(--color-selected-border);
+    border-radius: 1px;
+  }
+
+  /* === BLOCK TYPE: Heading === */
+  .b-heading {
+    font-family: var(--font-display);
+    font-weight: 500;
+    color: var(--color-ink);
+    line-height: 1.2;
+    margin: 0;
+  }
+  .b-heading--h1 { font-size: 40px; font-weight: 400; }
+  .b-heading--h2 { font-size: 28px; }
+  .b-heading--h3 { font-size: 20px; }
+
+  /* === BLOCK TYPE: Text (rich text) === */
+  .b-text {
+    font-family: var(--font-body);
+    font-size: 17px;
+    line-height: 1.65;
+    color: var(--color-ink);
+  }
+  .b-text em { color: var(--color-ink-soft); }
+
+  /* === BLOCK TYPE: Image === */
+  .b-image {
+    margin: 0.5rem 0;
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: var(--color-bg-warm);
+    aspect-ratio: 16 / 9;
+    background-size: cover; background-position: center;
+    border: 1px solid var(--color-line-soft);
+    background-image:
+      linear-gradient(135deg, rgb(42 31 23 / 0.1), rgb(42 31 23 / 0)),
+      url("https://images.unsplash.com/photo-1545389336-cf090694435e?w=1200&q=80");
+  }
+  .b-image__caption {
+    font-family: var(--font-ui);
+    font-size: 13px;
+    color: var(--color-ink-muted);
+    font-style: italic;
+    margin-top: 0.5rem;
+    text-align: center;
+  }
+  .b-image__alt-warning {
+    margin-top: 0.4rem;
+    font-size: 12px;
+    color: var(--color-success);
+    font-family: var(--font-ui);
+    display: flex; align-items: center; gap: 0.4rem;
+  }
+
+  /* === BLOCK TYPE: Program reference (custom, role-gated) === */
+  .b-program-ref {
+    border: 1px dashed var(--color-line);
+    background: rgb(184 137 60 / 0.06);
+    border-radius: var(--radius);
+    padding: 1rem 1.25rem;
+    display: flex; gap: 1rem; align-items: center;
+  }
+  .b-program-ref__icon {
+    width: 44px; height: 44px;
+    background: var(--color-gold);
+    border-radius: var(--radius);
+    display: grid; place-items: center;
+    color: var(--color-bg);
+    font-family: var(--font-display);
+    font-weight: 500; font-size: 18px;
+    flex-shrink: 0;
+  }
+  .b-program-ref__body { flex: 1; }
+  .b-program-ref__label {
+    font-family: var(--font-ui);
+    font-size: 11px;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--color-gold);
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+  .b-program-ref__title {
+    font-family: var(--font-display);
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--color-ink);
+    margin-bottom: 2px;
+  }
+  .b-program-ref__meta {
+    font-size: 12px;
+    color: var(--color-ink-muted);
+    font-family: var(--font-mono);
+  }
+  .b-program-ref__variant {
+    font-size: 11px;
+    color: var(--color-ink-faint);
+    font-family: var(--font-ui);
+    background: var(--color-bg-warm);
+    padding: 2px 8px;
+    border-radius: 999px;
+  }
+
+  /* === BLOCK TYPE: Quote === */
+  .b-quote {
+    border-left: 3px solid var(--color-accent);
+    padding-left: 1rem;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 19px;
+    line-height: 1.4;
+    color: var(--color-ink-soft);
+  }
+  .b-quote__attribution {
+    margin-top: 0.5rem;
+    font-family: var(--font-ui);
+    font-style: normal;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-ink-muted);
+  }
+
+  /* === BLOCK INSERTER ("+") between blocks === */
+  .block-inserter {
+    position: relative;
+    height: 0;
+    margin: 0.25rem 0;
+    display: flex;
+    align-items: center;
+  }
+  .block-inserter__button {
+    position: absolute;
+    left: -2.5rem;
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    border: 1px solid var(--color-line);
+    background: var(--color-bg-canvas);
+    color: var(--color-ink-muted);
+    display: grid; place-items: center;
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 1;
+    box-shadow: var(--shadow-pop-soft);
+    transition: transform var(--transition), background var(--transition);
+  }
+  .block-inserter__button:hover {
+    background: var(--color-bg-warm);
+    transform: scale(1.05);
+  }
+  .block-inserter--hover .block-inserter__button {
+    background: var(--color-accent);
+    color: var(--color-bg);
+    border-color: var(--color-accent);
+  }
+  .block-inserter--hover::after {
+    content: "";
+    position: absolute;
+    left: 0; right: 0; top: 50%;
+    height: 1px;
+    background: var(--color-accent);
+    opacity: 0.4;
+  }
+
+  /* === BLOCK TUNES POPOVER (open on selected block) === */
+  .tunes-popover {
+    position: absolute;
+    left: -16rem;
+    top: 1.5rem;
+    width: 240px;
+    background: var(--color-bg-canvas);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-pop);
+    z-index: 5;
+    overflow: hidden;
+    font-family: var(--font-ui);
+  }
+  .tunes-popover__group { padding: 0.4rem 0; }
+  .tunes-popover__group + .tunes-popover__group {
+    border-top: 1px solid var(--color-line-soft);
+  }
+  .tunes-popover__heading {
+    padding: 0.3rem 0.9rem;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-ink-faint);
+    font-weight: 600;
+  }
+  .tunes-popover__item {
+    padding: 0.5rem 0.9rem;
+    display: flex; align-items: center; gap: 0.6rem;
+    font-size: 13px;
+    color: var(--color-ink-soft);
+    cursor: pointer;
+    transition: background var(--transition);
+  }
+  .tunes-popover__item:hover { background: var(--color-bg-warm); }
+  .tunes-popover__item--danger { color: var(--color-accent); }
+  .tunes-popover__item-kbd {
+    margin-left: auto;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--color-ink-faint);
+    background: var(--color-bg-warm);
+    padding: 1px 5px;
+    border-radius: 2px;
+  }
+  .tunes-popover__item-icon {
+    width: 18px; height: 18px;
+    display: grid; place-items: center;
+    color: var(--color-ink-muted);
+    font-size: 13px;
+  }
+  .tunes-popover__item--active .tunes-popover__item-icon {
+    color: var(--color-accent);
+  }
+
+  /* === INLINE FORMATTING TOOLBAR (shown on text selection) === */
+  .inline-toolbar {
+    position: absolute;
+    top: -2.75rem;
+    left: 1rem;
+    background: var(--color-ink);
+    color: var(--color-bg);
+    border-radius: var(--radius);
+    padding: 0.25rem;
+    display: flex; gap: 1px;
+    box-shadow: var(--shadow-pop);
+    font-family: var(--font-ui);
+    z-index: 4;
+  }
+  .inline-toolbar::after {
+    content: "";
+    position: absolute;
+    bottom: -5px; left: 1rem;
+    width: 0; height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 6px solid var(--color-ink);
+  }
+  .inline-toolbar__btn {
+    width: 28px; height: 28px;
+    display: grid; place-items: center;
+    background: transparent; border: none;
+    color: var(--color-bg);
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    font-family: var(--font-ui);
+  }
+  .inline-toolbar__btn:hover { background: rgb(244 234 214 / 0.18); }
+  .inline-toolbar__btn--active { background: rgb(244 234 214 / 0.22); }
+  .inline-toolbar__sep {
+    width: 1px; background: rgb(244 234 214 / 0.2);
+    margin: 4px 2px;
+  }
+
+  /* selected text highlight effect */
+  .text-selection {
+    background: rgb(212 163 86 / 0.35);
+    border-radius: 2px;
+    padding: 1px 0;
+  }
+
+  /* ============================================================
+     RIGHT PANE — AI Assist (Claude API, v6.2 §13)
+     ============================================================ */
+  .ai-panel {
+    background: var(--color-bg);
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    overflow: hidden;
+    border-left: 1px solid var(--color-line-soft);
+  }
+  .ai-panel__header {
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--color-line-soft);
+    display: flex; align-items: center; gap: 0.6rem;
+  }
+  .ai-panel__icon {
+    width: 28px; height: 28px;
+    background: linear-gradient(135deg, var(--color-accent), var(--color-gold));
+    border-radius: var(--radius);
+    display: grid; place-items: center;
+    color: var(--color-bg);
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 14px;
+  }
+  .ai-panel__title {
+    font-family: var(--font-display);
+    font-size: 14px;
+    font-weight: 500;
+  }
+  .ai-panel__title-sub {
+    font-family: var(--font-ui);
+    font-size: 11px;
+    color: var(--color-ink-muted);
+    letter-spacing: 0.04em;
+  }
+  .ai-panel__menu {
+    margin-left: auto;
+    color: var(--color-ink-muted);
+    cursor: pointer;
+    font-size: 16px;
+    padding: 0.3rem 0.5rem;
+    border-radius: var(--radius-sm);
+  }
+  .ai-panel__menu:hover { background: var(--color-bg-warm); }
+
+  .ai-panel__messages {
+    padding: 1rem 1.25rem;
+    overflow-y: auto;
+    display: flex; flex-direction: column; gap: 1.25rem;
+  }
+  .msg { display: flex; flex-direction: column; gap: 0.35rem; }
+  .msg__role {
+    font-family: var(--font-ui);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-ink-faint);
+    font-weight: 600;
+    display: flex; align-items: center; gap: 0.4rem;
+  }
+  .msg__role--user::before {
+    content: ""; width: 5px; height: 5px;
+    background: var(--color-gold); border-radius: 50%;
+  }
+  .msg__role--ai::before {
+    content: ""; width: 5px; height: 5px;
+    background: var(--color-accent); border-radius: 50%;
+  }
+  .msg__bubble {
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--color-ink);
+  }
+  .msg__bubble--ai {
+    background: var(--color-bg-warm);
+    padding: 0.75rem 0.9rem;
+    border-radius: var(--radius);
+    border-left: 2px solid var(--color-accent);
+  }
+  .msg__actions {
+    display: flex; gap: 0.4rem; margin-top: 0.4rem;
+    flex-wrap: wrap;
+  }
+  .msg__action {
+    font-family: var(--font-ui);
+    font-size: 11px;
+    padding: 0.3rem 0.6rem;
+    background: var(--color-bg);
+    border: 1px solid var(--color-line-soft);
+    border-radius: var(--radius-sm);
+    color: var(--color-ink-soft);
+    cursor: pointer;
+    display: inline-flex; align-items: center; gap: 0.3rem;
+    text-decoration: none;
+  }
+  .msg__action:hover { background: var(--color-bg-warm); border-color: var(--color-line); }
+  .msg__action--primary {
+    background: var(--color-accent);
+    color: var(--color-bg);
+    border-color: var(--color-accent);
+  }
+  .msg__action--primary:hover { background: var(--color-accent-deep); color: var(--color-bg); }
+
+  .ai-panel__input {
+    border-top: 1px solid var(--color-line-soft);
+    padding: 0.75rem 1rem 1rem;
+    background: var(--color-bg);
+  }
+  .ai-panel__quick {
+    display: flex; flex-wrap: wrap; gap: 0.3rem;
+    margin-bottom: 0.6rem;
+  }
+  .ai-quick-btn {
+    font-family: var(--font-ui);
+    font-size: 11px;
+    background: var(--color-bg-warm);
+    border: 1px solid var(--color-line-soft);
+    border-radius: 999px;
+    padding: 0.3rem 0.7rem;
+    color: var(--color-ink-soft);
+    cursor: pointer;
+    transition: background var(--transition);
+  }
+  .ai-quick-btn:hover { background: var(--color-line-soft); }
+  .ai-panel__textarea {
+    width: 100%;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius);
+    padding: 0.6rem 0.75rem;
+    font-family: var(--font-body);
+    font-size: 14px;
+    color: var(--color-ink);
+    background: var(--color-bg-canvas);
+    resize: none;
+    min-height: 60px;
+    outline: none;
+  }
+  .ai-panel__textarea:focus { border-color: var(--color-accent); }
+  .ai-panel__send-row {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-top: 0.5rem;
+  }
+  .ai-panel__model-info {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--color-ink-faint);
+  }
+  .ai-panel__send {
+    background: var(--color-accent);
+    color: var(--color-bg);
+    border: none;
+    border-radius: var(--radius);
+    padding: 0.4rem 0.75rem;
+    font-family: var(--font-ui);
+    font-size: 12px;
+    cursor: pointer;
+  }
+
+  /* === Status indicators === */
+  .alt-text-status {
+    display: inline-flex; align-items: center; gap: 0.3rem;
+    font-family: var(--font-ui); font-size: 11px;
+    color: var(--color-success);
+    background: rgb(90 122 62 / 0.1);
+    padding: 1px 6px; border-radius: 2px;
+  }
+
+  /* Scrollbar styling */
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--color-line); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--color-line); }
+
+  @media (max-width: 1100px) {
+    .workspace { grid-template-columns: 56px 1fr; }
+    .ai-panel { display: none; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- ============================================================
+       SAVE BAR (top)
+       ============================================================ -->
+  <div class="save-bar">
+    <a href="/admin/content/marketing" class="save-bar__back">
+      <span aria-hidden="true">&larr;</span>
+      <span>Marketing pages</span>
+    </a>
+    <div class="save-bar__divider"></div>
+    <div class="save-bar__title-block">
+      <div class="save-bar__path">/learn-to-meditate</div>
+      <div class="save-bar__title">
+        Learn to Meditate
+      </div>
+    </div>
+    <div class="save-bar__status">Draft &mdash; 4 unpublished changes</div>
+    <div class="save-bar__autosave">Auto&#8209;saved 12s ago</div>
+    <div class="save-bar__actions">
+      <button class="btn btn--ghost">Version history</button>
+      <button class="btn">Preview</button>
+      <button class="btn btn--primary">Publish</button>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       WORKSPACE (three-pane)
+       ============================================================ -->
+  <div class="workspace">
+
+    <!-- LEFT RAIL -->
+    <nav class="rail" aria-label="Admin sections">
+      <div class="rail__item rail__item--active" title="Content">&#9636;</div>
+      <div class="rail__item" title="Programs">&#9678;</div>
+      <div class="rail__item" title="Teachers">&#9737;</div>
+      <div class="rail__item" title="Media library">&#9646;</div>
+      <div class="rail__divider"></div>
+      <div class="rail__item" title="Newsletter">&#9993;</div>
+      <div class="rail__item" title="Analytics">&#9776;</div>
+      <div class="rail__item" title="Audit log">&#9869;</div>
+      <div class="rail__item" title="Settings">&#9881;</div>
+      <div class="rail__profile" title="Signed in as Sarah">S</div>
+    </nav>
+
+    <!-- CENTER: Editor.js canvas -->
+    <main class="canvas-area">
+      <div class="canvas-area__inner">
+
+        <!-- Page title (engineered field, above Editor.js blocks) -->
+        <input class="page-title" type="text" value="Learn to Meditate" readonly>
+        <div class="page-slug">
+          <span class="page-slug__label">URL</span>
+          <span>karmecholing.org/learn-to-meditate</span>
+        </div>
+
+        <!--
+          ============================================================
+          EDITOR.JS BLOCK CANVAS
+          Each .block below is what Editor.js renders.
+          One block is shown in "selected" state with tunes popover.
+          ============================================================
+        -->
+
+        <!-- Block: Heading (h1) — SELECTED, tunes popover visible -->
+        <div class="block block--selected">
+          <div class="block__handles">
+            <div class="block__handle block__handle--drag" aria-label="Drag to reorder">&#10495;&#10495;</div>
+            <div class="block__handle" aria-label="Block settings">&#9881;</div>
+          </div>
+          <h1 class="b-heading b-heading--h1">Learn to <em>meditate</em>.</h1>
+
+          <!-- Block tunes popover (open because block is selected) -->
+          <div class="tunes-popover" role="menu" aria-label="Block settings">
+            <div class="tunes-popover__group">
+              <div class="tunes-popover__heading">Heading level</div>
+              <div class="tunes-popover__item tunes-popover__item--active">
+                <span class="tunes-popover__item-icon">H1</span>
+                <span>Heading 1</span>
+              </div>
+              <div class="tunes-popover__item">
+                <span class="tunes-popover__item-icon">H2</span>
+                <span>Heading 2</span>
+              </div>
+              <div class="tunes-popover__item">
+                <span class="tunes-popover__item-icon">H3</span>
+                <span>Heading 3</span>
+              </div>
+            </div>
+            <div class="tunes-popover__group">
+              <div class="tunes-popover__heading">Block</div>
+              <div class="tunes-popover__item">
+                <span class="tunes-popover__item-icon">&#8593;</span>
+                <span>Move up</span>
+              </div>
+              <div class="tunes-popover__item">
+                <span class="tunes-popover__item-icon">&#8595;</span>
+                <span>Move down</span>
+              </div>
+              <div class="tunes-popover__item">
+                <span class="tunes-popover__item-icon">&#8624;</span>
+                <span>Convert to&hellip;</span>
+              </div>
+              <div class="tunes-popover__item">
+                <span class="tunes-popover__item-icon">&#9112;</span>
+                <span>Duplicate</span>
+                <span class="tunes-popover__item-kbd">&#8984;D</span>
+              </div>
+              <div class="tunes-popover__item tunes-popover__item--danger">
+                <span class="tunes-popover__item-icon">&#9587;</span>
+                <span>Delete block</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Block inserter (hover state) -->
+        <div class="block-inserter">
+          <button class="block-inserter__button" aria-label="Insert block">+</button>
+        </div>
+
+        <!-- Block: Text — with inline formatting toolbar visible -->
+        <div class="block" style="position: relative;">
+          <div class="block__handles">
+            <div class="block__handle block__handle--drag">&#10495;&#10495;</div>
+            <div class="block__handle">&#9881;</div>
+          </div>
+          <div class="inline-toolbar" role="toolbar" aria-label="Text formatting">
+            <button class="inline-toolbar__btn inline-toolbar__btn--active" aria-label="Bold"><strong>B</strong></button>
+            <button class="inline-toolbar__btn" aria-label="Italic"><em>I</em></button>
+            <div class="inline-toolbar__sep"></div>
+            <button class="inline-toolbar__btn" aria-label="Link">&#128279;</button>
+            <button class="inline-toolbar__btn" aria-label="Inline code">&#60;/&#62;</button>
+            <div class="inline-toolbar__sep"></div>
+            <button class="inline-toolbar__btn" aria-label="Ask Claude">&#10024;</button>
+          </div>
+          <p class="b-text">
+            The instruction is simple. <span class="text-selection">Sit upright. Notice the breath.</span>
+            When you find that your mind has wandered &mdash; and it will, again and again
+            &mdash; gently return your attention to the breath. That is the practice.
+            There is nothing else to attain.
+          </p>
+        </div>
+
+        <!-- Block inserter -->
+        <div class="block-inserter">
+          <button class="block-inserter__button" aria-label="Insert block">+</button>
+        </div>
+
+        <!-- Block: Image (with alt-text status indicator from AI) -->
+        <div class="block">
+          <div class="block__handles">
+            <div class="block__handle block__handle--drag">&#10495;&#10495;</div>
+            <div class="block__handle">&#9881;</div>
+          </div>
+          <figure>
+            <div class="b-image" role="img" aria-label="A meditation hall with cushions arranged in rows, soft natural light through tall windows"></div>
+            <figcaption class="b-image__caption">
+              The main shrine room at Karm&ecirc; Ch&ouml;ling, set for morning practice.
+            </figcaption>
+          </figure>
+          <div class="b-image__alt-warning">
+            <span aria-hidden="true">&#10003;</span>
+            <span>Alt text generated by Claude &middot; reviewed by Sarah</span>
+          </div>
+        </div>
+
+        <!-- Block inserter, in hover state to show the affordance -->
+        <div class="block-inserter block-inserter--hover">
+          <button class="block-inserter__button" aria-label="Insert block">+</button>
+        </div>
+
+        <!-- Block: Program reference (live data binding) -->
+        <div class="block">
+          <div class="block__handles">
+            <div class="block__handle block__handle--drag">&#10495;&#10495;</div>
+            <div class="block__handle">&#9881;</div>
+          </div>
+          <div class="b-program-ref">
+            <div class="b-program-ref__icon">&#9678;</div>
+            <div class="b-program-ref__body">
+              <div class="b-program-ref__label">Program reference &middot; live data</div>
+              <div class="b-program-ref__title">Shambhala Training Level I: The Art of Being Human</div>
+              <div class="b-program-ref__meta">program_id: 47 &middot; April 17&ndash;19, 2026 &middot; $385</div>
+            </div>
+            <div class="b-program-ref__variant">Feature variant</div>
+          </div>
+        </div>
+
+        <!-- Block inserter -->
+        <div class="block-inserter">
+          <button class="block-inserter__button" aria-label="Insert block">+</button>
+        </div>
+
+        <!-- Block: Quote -->
+        <div class="block">
+          <div class="block__handles">
+            <div class="block__handle block__handle--drag">&#10495;&#10495;</div>
+            <div class="block__handle">&#9881;</div>
+          </div>
+          <blockquote class="b-quote">
+            The first discovery of warriorship is the discovery of what we have not done.
+            We have not looked at ourselves enough. We have not appreciated our world enough.
+            <div class="b-quote__attribution">Ch&ouml;gyam Trungpa Rinpoche</div>
+          </blockquote>
+        </div>
+
+        <!-- Final block inserter -->
+        <div class="block-inserter">
+          <button class="block-inserter__button" aria-label="Insert block">+</button>
+        </div>
+
+      </div>
+    </main>
+
+    <!-- ============================================================
+         RIGHT: AI Assist panel (Claude API)
+         ============================================================ -->
+    <aside class="ai-panel" aria-label="AI Assist">
+      <div class="ai-panel__header">
+        <div class="ai-panel__icon">A</div>
+        <div>
+          <div class="ai-panel__title">AI Assist</div>
+          <div class="ai-panel__title-sub">Voice: marketing-voice v3</div>
+        </div>
+        <div class="ai-panel__menu" aria-label="Panel menu">&#8943;</div>
+      </div>
+
+      <div class="ai-panel__messages">
+
+        <div class="msg">
+          <div class="msg__role msg__role--user">You</div>
+          <div class="msg__bubble">
+            Draft an opening paragraph for the Learn to Meditate hub.
+            Should feel grounded and contemplative, not promotional.
+            Reference the Shambhala teaching of basic goodness without
+            sounding doctrinal.
+          </div>
+        </div>
+
+        <div class="msg">
+          <div class="msg__role msg__role--ai">Claude</div>
+          <div class="msg__bubble msg__bubble--ai">
+            The instruction is simple. Sit upright. Notice the breath.
+            When you find that your mind has wandered &mdash; and it
+            will, again and again &mdash; gently return your attention
+            to the breath. That is the practice. There is nothing else
+            to attain.
+          </div>
+          <div class="msg__actions">
+            <a class="msg__action msg__action--primary" href="#">
+              <span aria-hidden="true">&#10003;</span>
+              <span>Insert as Text block</span>
+            </a>
+            <a class="msg__action" href="#">Revise</a>
+            <a class="msg__action" href="#">Try another tone</a>
+          </div>
+        </div>
+
+        <div class="msg">
+          <div class="msg__role msg__role--user">You</div>
+          <div class="msg__bubble">
+            Generate alt text for the meditation hall photo.
+          </div>
+        </div>
+
+        <div class="msg">
+          <div class="msg__role msg__role--ai">Claude</div>
+          <div class="msg__bubble msg__bubble--ai">
+            A meditation hall with cushions arranged in rows, soft
+            natural light through tall windows.
+          </div>
+          <div class="msg__actions">
+            <a class="msg__action msg__action--primary" href="#">
+              <span aria-hidden="true">&#10003;</span>
+              <span>Apply to image</span>
+            </a>
+            <a class="msg__action" href="#">Make it shorter</a>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="ai-panel__input">
+        <div class="ai-panel__quick">
+          <button class="ai-quick-btn">Continue writing</button>
+          <button class="ai-quick-btn">Suggest a quote</button>
+          <button class="ai-quick-btn">Tighten this</button>
+          <button class="ai-quick-btn">Voice check</button>
+        </div>
+        <textarea class="ai-panel__textarea" placeholder="Ask Claude to help draft, refine, or check voice&hellip;"></textarea>
+        <div class="ai-panel__send-row">
+          <span class="ai-panel__model-info">claude-opus-4-7 &middot; credits: 12.4M tokens left</span>
+          <button class="ai-panel__send">Send &uarr;</button>
+        </div>
+      </div>
+    </aside>
+
+  </div>
+</body>
+</html>
