@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<!--
+  Support Karmê Chöling — a /donate Marketing-CMS page, rendered as a REAL
+  Ominus public surface.
+
+  WHAT THIS IS
+  ------------
+  An engineered preview of what the development director's
+  development_webpage.md requirements become once authored in the Ominus
+  Marketing CMS (frontend-vision §12) and served through the public chrome
+  (layouts.Public, §7) from https://kcl-engine.karmecholing-dev.org/.
+
+  Every link points at a REAL Ominus route, so the page behaves like the live
+  page it would be. The /donate route is a HYBRID (internal/web/public_content.go
+  DonateIndex): CMS-authored PROSE (a pages row, slug "donate", rendered by
+  ContentSvc.RenderPublishedPage) composed WITH the engineered backing FORM
+  (DonateIndexView). That is exactly the arrangement here — the prose below is
+  the block content a Development author would type; the "Give online" panel is
+  the engineered form (it is not a block an author types).
+
+  GROUNDED IN THE REAL ENGINE (discovery 2026-06-22, ominus@f540e7c)
+  -----------------------------------------------------------------
+   • Donation rail is OMINUS's own, not CiviCRM/Shambhala. v1 routes one-time
+     gifts through PayPal (ADR-015); Venmo rides the same PayPal rail (ADR-070);
+     Zelle is a manual-record rail with on-page instructions (ADR-070). The form
+     POSTs to /donate/give and 303s to PayPal; the /webhooks/paypal receiver
+     records the gift on capture (gross-not-net; idempotent; ADR-040 donor
+     attribution). Authorize.net is the registration/program processor.
+
+   • Ominus is the SYSTEM OF RECORD and issues its OWN 501(c)(3) tax receipts —
+     a year-end consolidated letter under dual control (Development + Finance),
+     EIN + attestation snapshotted, immutable (tax_receipt_service.go). The
+     director's "Shambhala will issue a year-end tax receipt" is the legacy
+     reality this REPLACES.
+
+   • Funds = FUNDRAISING-category programs. The "Direct my gift to" dropdown is
+     populated from programs where accepts_donations = true; the General Fund
+     (migration 00112, "area of greatest need") is the default; restricted funds
+     (ADR-069) appear only while a campaign is live.
+
+   • Anonymity: anonymous by DEFAULT unless the donor checks the consent box
+     (§25 Q-PRIV2 → anon:1 in the PayPal passthrough → both anonymity flags off).
+
+   • Recurring/monthly gifts are Development-RUN, not auto-charged (ADR-042);
+     they are set up with Development, not on this public form — so the page
+     points monthly donors to the team, matching the real /donate copy.
+
+   • Cross-link to the GENEROSITY registration tier (the register→donation
+     bridge): a guest can give at checkout by choosing Generosity, and the
+     overpayment becomes a donation line (BR-REG-20).
+
+  The director's PROSE (case for support, "More Ways to Give", contact,
+  501(c)(3) footer) is preserved — it maps cleanly onto CMS blocks. Only the
+  legacy CiviCRM → Shambhala USA/Canada payment plumbing is replaced by the
+  real Ominus rail.
+
+  Only the subset of skeleton.css this page needs is inlined (classes + values
+  copied verbatim) so the file opens standalone and matches production.
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Head — matches internal/views/layouts/base.templ (seoHead / pageTitle).
+       Title format: "{Page} — Karmê Chöling Meditation Retreat Center". -->
+  <title>Support Karmê Chöling — Karmê Chöling Meditation Retreat Center</title>
+  <meta name="description" content="Karmê Chöling is a nonprofit Buddhist meditation retreat center in Barnet, Vermont. Your gifts sustain our programs, our land, scholarships, and access for all.">
+  <!-- Path-only canonical (the §17 convention — host-relative). -->
+  <link rel="canonical" href="/donate">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Support Karmê Chöling">
+  <meta property="og:description" content="Help sustain Karmê Chöling — a place of practice, sustained by community.">
+  <link rel="icon" href="/static/brand/favicon-32x32.png" sizes="32x32">
+  <link rel="apple-touch-icon" href="/static/brand/apple-touch-icon.png">
+
+  <!-- Organization JSON-LD — emitted on every public page (org_jsonld.go). -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Karmê Chöling Meditation Retreat Center",
+    "url": "https://karmecholing.org",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "369 Patneaude Lane",
+      "addressLocality": "Barnet",
+      "addressRegion": "VT",
+      "postalCode": "05821",
+      "addressCountry": "US"
+    }
+  }
+  </script>
+
+  <style>
+    /* ====================================================================
+       :root design tokens — copied verbatim from skeleton.css :root
+       (the ADR-048 production-website palette; Literata serif throughout).
+       ==================================================================== */
+    :root {
+      --white: #FAFAFA;
+      --orange: #d24317;                        /* terracotta accent (text-safe) */
+      --brand-blue: hsl(203, 70%, 27%);
+      --brand-gold: hsl(42, 74%, 32%);
+      --brand-gold-bright: hsl(42, 74%, 50%);
+      --brand-dark: hsl(42, 2%, 13%);
+      --ink: #1a1918;
+      --ink-soft: #595754;
+      --ink-faint: #6a6862;
+      --rule: rgba(26, 25, 24, 0.10);
+      --rule-strong: rgba(26, 25, 24, 0.20);
+      --bg-disabled: #eeeeec;
+      --bg-neutral: #ececea;
+      --bg-stripe: rgba(26, 25, 24, 0.018);
+      --bg-hover: rgba(26, 25, 24, 0.035);
+
+      --bg: var(--white);
+      --text: var(--ink);
+      --text-soft: var(--ink-soft);
+      --text-faint: var(--ink-faint);
+      --on-dark: #FAFAFA;
+      --accent: var(--orange);
+      --cta: var(--brand-gold);                 /* primary-button / CTA fill */
+      --border: var(--rule);
+      --border-strong: var(--rule-strong);
+      --bg-accent-faint: color-mix(in srgb, var(--accent) 8%, var(--bg));
+      --color-ink-muted: var(--ink-faint);
+      --color-line: var(--rule);
+      --color-accent: var(--accent);
+      --radius: 4px;
+      --radius-sm: 2px;
+      --radius-md: 6px;
+      --radius-full: 9999px;
+      --focus-ring: 2px solid var(--accent);
+      --focus-ring-offset: 2px;
+
+      --type-small: 13px;
+      --type-nav: 11.5px;
+      --tracking-nav: 0.16em;
+      --tracking-wordmark: 0.22em;
+
+      --container-max: 1240px;
+      --container-pad: 48px;
+      --section-pad: 56px;
+      --topbar-pad: 10px;
+      --rhythm-tight: 14px;
+      --rhythm: 28px;
+      --rhythm-loose: 60px;
+      --z-chrome: 100;
+      --transition-base: 160ms ease;
+      --transition-slow: 240ms ease;
+      --touch-target-min: 44px;
+
+      --space-1: .25rem; --space-2: .5rem; --space-3: .75rem;
+      --space-4: 1rem;   --space-5: 1.5rem;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --white: #1c1b1a;
+        --ink: #FAFAFA;
+        --ink-soft: #b6b4b0;
+        --ink-faint: #93918c;
+        --rule: rgba(250, 250, 250, 0.12);
+        --rule-strong: rgba(250, 250, 250, 0.22);
+        --bg-neutral: #282725;
+        --bg-stripe: rgba(250, 250, 250, 0.02);
+        --bg-hover: rgba(250, 250, 250, 0.045);
+        --bg-disabled: #242322;
+      }
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html { font-size: 16px; line-height: 1.5; color: var(--text); background: var(--bg); -webkit-text-size-adjust: 100%; }
+    html, body { scrollbar-width: none; }
+    html::-webkit-scrollbar, body::-webkit-scrollbar { display: none; }
+    body { font-family: 'Literata', Georgia, serif; margin: 0; padding: 0; min-height: 100vh; display: flex; flex-direction: column; }
+
+    main { flex: 1; max-width: var(--container-max); width: 100%; margin: 0 auto; padding: var(--rhythm-tight) var(--container-pad); }
+    @media (min-width: 48rem) { main { padding: 1rem 1.5rem; } }
+    .prose { max-width: 65ch; }
+
+    h1 { font-size: 1.75rem; font-weight: 400; margin: 0 0 0.75rem; }
+    h2 { font-size: 1.35rem; font-weight: 400; margin: 1.5rem 0 0.5rem; }
+    h3 { font-size: 1.1rem;  font-weight: 400; margin: 1rem 0 0.35rem; }
+    p { margin: 0 0 0.75rem; }
+    ul { margin: 0 0 0.75rem; padding-left: 1.4rem; }
+    li { margin-bottom: 0.25rem; }
+    small, .text-sm { font-size: 0.875rem; }
+    .text-faint { color: var(--text-faint); }
+    .text-soft { color: var(--text-soft); }
+
+    a { color: var(--accent); text-decoration: underline; }
+    a:hover { color: var(--ink); }
+    a:focus-visible { outline: var(--focus-ring); outline-offset: var(--focus-ring-offset); }
+
+    button, .btn { display: inline-block; padding: 0.4rem 0.8rem; border: 1px solid var(--border-strong); background: var(--bg); color: var(--text); font: inherit; font-size: 0.875rem; cursor: pointer; text-decoration: none; border-radius: 2px; }
+    button:hover, .btn:hover { border-color: var(--ink); }
+    .btn-primary { background: var(--cta); color: var(--white); border-color: var(--cta); }
+    .btn-primary:hover { filter: brightness(1.06); border-color: var(--cta); color: var(--white); }
+    .btn-lg { font-size: 1rem; padding: 0.6rem 1.3rem; }
+    input, select, textarea { display: block; width: 100%; padding: 0.4rem 0.5rem; border: 1px solid var(--border-strong); font: inherit; font-size: 0.875rem; background: var(--bg); color: var(--text); border-radius: 2px; }
+    input:focus, select:focus, textarea:focus { outline: 2px solid var(--accent); outline-offset: -1px; border-color: var(--accent); }
+    fieldset { border: 1px solid var(--border); border-radius: var(--radius); margin: 0 0 var(--rhythm-tight); padding: var(--space-4); }
+    legend { font-size: 0.95rem; padding: 0 .4rem; }
+
+    /* =====================================================================
+       Public chrome — navbar (§7 SiteNavbar, components/site_navbar.templ)
+       ===================================================================== */
+    .site-navbar { border-bottom: 1px solid var(--rule); padding: var(--topbar-pad) 0; position: sticky; top: 0; z-index: var(--z-chrome); background: var(--bg); }
+    .site-navbar-inner { width: 100%; margin: 0 auto; padding: 0 var(--container-pad); display: flex; align-items: center; justify-content: space-between; gap: var(--rhythm); }
+    .site-wordmark { font-size: var(--type-small); font-weight: 400; letter-spacing: var(--tracking-wordmark); text-transform: uppercase; color: var(--ink); text-decoration: none; display: inline-flex; align-items: center; gap: 10px; white-space: nowrap; }
+    .site-wordmark:hover { color: var(--ink); }
+    .site-wordmark-mark { width: 30px; height: 30px; flex: 0 0 auto; }
+    .site-navbar-desktop { display: none; }
+    .site-hamburger { display: inline-flex; align-items: center; justify-content: center; background: none; border: 1px solid transparent; color: var(--ink); width: 44px; height: 44px; padding: 0; border-radius: var(--radius-sm); }
+    .site-hamburger svg { width: 24px; height: 24px; display: block; }
+    @media (min-width: 48rem) {
+      .site-navbar-desktop { display: flex; align-items: center; gap: var(--rhythm); }
+      .site-hamburger { display: none; }
+    }
+    .site-nav { display: flex; align-items: center; gap: 36px; }
+    .site-nav-link { font-size: var(--type-nav); font-weight: 400; letter-spacing: var(--tracking-nav); text-transform: uppercase; color: var(--ink); text-decoration: none; position: relative; padding-bottom: 4px; transition: color var(--transition-base); }
+    .site-nav-link::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: var(--accent); transform: scaleX(0); transform-origin: left center; transition: transform var(--transition-slow); }
+    .site-nav-link:hover { color: var(--accent); }
+    .site-nav-link:hover::after, .site-nav-link[aria-current="page"]::after { transform: scaleX(1); }
+    .site-actions { display: flex; align-items: center; gap: 14px; }
+    .site-search-icon { color: var(--ink); display: inline-flex; align-items: center; min-height: 44px; }
+    .site-search-icon:hover { color: var(--accent); }
+    .site-search-icon svg { width: 18px; height: 18px; }
+    .site-account-link { font-size: var(--type-nav); font-weight: 400; letter-spacing: var(--tracking-nav); text-transform: uppercase; color: var(--ink); text-decoration: none; display: inline-flex; align-items: center; min-height: 44px; padding: 0 4px; }
+    .site-account-link:hover { color: var(--accent); }
+
+    /* =====================================================================
+       Marketing-CMS blocks (Layer 5 S2, §12) — copied verbatim from
+       skeleton.css. Structural layout only; visual identity from tokens.
+       ===================================================================== */
+    .blk-columns { display: grid; grid-template-columns: 1fr; gap: var(--space-4, 1rem); }
+    @media (min-width: 48rem) {
+      .blk-columns--2 { grid-template-columns: 1fr 1fr; }
+      .blk-columns--3 { grid-template-columns: 1fr 1fr 1fr; }
+    }
+    .blk-quote { border-left: 3px solid var(--color-accent, #8b1f1f); padding-left: var(--space-4, 1rem); font-style: italic; }
+    .blk-quote footer { font-style: normal; font-size: 0.875rem; color: var(--color-ink-muted, #666); }
+    .blk-quote p { margin: 0 0 0.4rem; }
+    .blk-cta { margin: var(--rhythm-tight) 0; }
+    /* Accordion — native <details> (§28 disclosure pattern). */
+    .blk-accordion { margin: var(--rhythm-tight) 0; }
+    .blk-accordion-item { border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 0.5rem; background: var(--bg); }
+    .blk-accordion-item > summary { cursor: pointer; padding: 0.75rem 1rem; font-size: 1.05rem; list-style: none; }
+    .blk-accordion-item > summary::-webkit-details-marker { display: none; }
+    .blk-accordion-item > summary::before { content: '+'; display: inline-block; width: 1.1em; color: var(--accent); font-weight: 600; }
+    .blk-accordion-item[open] > summary::before { content: '–'; }
+    .blk-accordion-item[open] > summary { border-bottom: 1px solid var(--border); }
+    .blk-accordion-body { padding: 0.5rem 1rem 1rem; }
+
+    /* page lede band (§12 lede convention — structural only). */
+    .page-lede { background: var(--bg-accent-faint); border-radius: var(--radius-md); padding: var(--rhythm) var(--rhythm); margin-bottom: var(--rhythm); }
+    .page-lede h1 { margin-bottom: 0.5rem; }
+    .page-lede .eyebrow { font-size: var(--type-small); letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin: 0 0 0.5rem; }
+
+    hr { border: 0; border-top: 1px solid var(--border); margin: var(--rhythm) 0; }
+
+    /* The engineered "Give online" backing form (§9 donate flow) — the
+       DonateIndexView panel embedded in the CMS page. .donate-* mirror the kit. */
+    .donate-panel { border: 1px solid var(--border-strong); border-radius: var(--radius-md); padding: var(--rhythm); margin: var(--rhythm-tight) 0 var(--rhythm); background: var(--bg); }
+    .donate-amounts { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .donate-amounts label { flex: 1 1 6rem; display: flex; align-items: center; gap: 0.4rem; border: 1px solid var(--border-strong); border-radius: var(--radius-sm); padding: 0.5rem 0.7rem; cursor: pointer; }
+    .donate-amounts label:has(input:checked) { border-color: var(--accent); background: var(--bg-accent-faint); }
+    .donate-amounts input[type=radio] { width: auto; display: inline; margin: 0; }
+    .donate-consent { display: flex; align-items: flex-start; gap: 0.5rem; margin: var(--rhythm-tight) 0; }
+    .donate-consent input { width: auto; display: inline; margin-top: 0.25rem; }
+    .donate-note { font-size: var(--type-small); color: var(--text-faint); }
+    .donate-receipt-note { font-size: var(--type-small); color: var(--text-soft); border-left: 3px solid var(--accent); padding: 0.5rem 0.75rem; background: var(--bg-accent-faint); border-radius: var(--radius-sm); margin-top: var(--rhythm-tight); }
+    .donate-rails { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; margin-top: var(--rhythm-tight); }
+    .pay-chip { font-size: var(--type-small); border: 1px solid var(--border); border-radius: var(--radius-full); padding: 0.25rem 0.7rem; color: var(--text-soft); }
+
+    .contact-card { border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: var(--radius-md); padding: var(--rhythm); background: var(--bg); }
+    .contact-card p { margin-bottom: 0.35rem; }
+
+    /* =====================================================================
+       Public chrome — footer (§7 SiteFooter, components/site_footer.templ)
+       ===================================================================== */
+    .site-footer { padding: var(--rhythm-loose) 0; margin-top: var(--section-pad); background: var(--brand-dark); color: var(--white); font-size: var(--type-small); }
+    .site-footer-inner { width: 100%; max-width: var(--container-max); margin: 0 auto; padding: 0 var(--container-pad); display: grid; gap: var(--rhythm); }
+    .site-footer a { color: var(--white); text-decoration: none; }
+    .site-footer a:hover { color: var(--brand-gold-bright); }
+    .site-footer-brand { font-weight: 400; color: var(--white); }
+    .site-footer-links { display: flex; flex-wrap: wrap; gap: 20px; list-style: none; padding: 0; margin: 0; }
+    .site-footer-sitemap { display: flex; flex-wrap: wrap; gap: 16px; list-style: none; padding: 0; margin: 0; }
+    .site-footer-newsletter { display: flex; flex-wrap: wrap; gap: 0; align-items: stretch; max-width: 36rem; }
+    .site-footer-newsletter label { flex-basis: 100%; color: var(--white); font-weight: 400; margin-bottom: 0.4rem; }
+    .site-footer-newsletter input { flex: 1 1 12rem; min-width: 0; padding: 0.6rem 0.8rem; border: none; border-radius: 2px 0 0 2px; background: var(--white); color: var(--ink); font: inherit; }
+    .site-footer-newsletter .btn { border-radius: 0 2px 2px 0; background: var(--brand-gold-bright); color: var(--ink); border-color: var(--brand-gold-bright); font-weight: 400; padding: 0.6rem 1.1rem; }
+    .site-footer-social { display: flex; gap: 16px; }
+    .site-footer-copyright { color: rgba(250, 250, 250, 0.72); }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { animation: none !important; transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===================================================================
+       NAVBAR — §7 SiteNavbar (components/site_navbar.templ).
+       Wordmark → / ; Programs/Teachers/About/Visit/Contact ; search ; Sign In.
+       (No Donate button in the navbar — removed 2026-06-13; it lives in the
+       footer + the page.) Links point at the live dev host. The brand uses an
+       inline mark in place of /static/brand/karme-choling-logo.png.
+       =================================================================== -->
+  <header class="site-navbar">
+    <div class="site-navbar-inner">
+      <a href="https://kcl-engine.karmecholing-dev.org/" class="site-wordmark" aria-label="Karmê Chöling">
+        <svg class="site-wordmark-mark" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          <circle cx="24" cy="24" r="21"></circle>
+          <path d="M24 7 C16 18 16 30 24 41 C32 30 32 18 24 7 Z"></path>
+          <line x1="24" y1="7" x2="24" y2="41"></line>
+        </svg>
+        Karmê Chöling
+      </a>
+
+      <div class="site-navbar-desktop">
+        <nav class="site-nav" aria-label="Primary">
+          <a class="site-nav-link" href="https://kcl-engine.karmecholing-dev.org/programs">Programs</a>
+          <a class="site-nav-link" href="https://kcl-engine.karmecholing-dev.org/teachers">Teachers</a>
+          <a class="site-nav-link" href="https://kcl-engine.karmecholing-dev.org/about">About</a>
+          <a class="site-nav-link" href="https://kcl-engine.karmecholing-dev.org/visit">Visit</a>
+          <a class="site-nav-link" href="https://kcl-engine.karmecholing-dev.org/contact">Contact</a>
+        </nav>
+        <div class="site-actions">
+          <a class="site-search-icon" href="https://kcl-engine.karmecholing-dev.org/search" aria-label="Search">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <circle cx="11" cy="11" r="7"></circle>
+              <line x1="21" y1="21" x2="16.5" y2="16.5"></line>
+            </svg>
+          </a>
+          <a class="site-account-link" href="https://kcl-engine.karmecholing-dev.org/login">Sign In</a>
+        </div>
+      </div>
+
+      <button type="button" class="site-hamburger" aria-expanded="false" aria-controls="site-drawer" aria-label="Open menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- ===================================================================
+       PAGE BODY — the rendered Marketing-CMS block content (slug "donate"),
+       composed with the engineered "Give online" form. Each commented section
+       names the block type (block_render.go) the author placed in the editor.
+       =================================================================== -->
+  <main>
+
+    <!-- BLOCK: text (page lede band) holding the opening headings + case -->
+    <div class="page-lede">
+      <p class="eyebrow">Development · Give to Karmê Chöling</p>
+      <!-- BLOCK: heading (level 1) -->
+      <h1 class="blk-heading" id="support">Support Karmê Chöling</h1>
+      <!-- BLOCK: heading (level 2) -->
+      <h2 class="blk-heading">A Place of Practice, Sustained by Community</h2>
+      <!-- BLOCK: text -->
+      <div class="blk-text prose">
+        <p><strong>Karmê Chöling</strong> is a nonprofit Buddhist meditation
+        retreat center dedicated to nurturing awareness, compassion, and
+        connection through meditation, community practice, and retreat
+        offerings. Your gifts make it possible for us to sustain and grow our
+        programs, maintain our sacred space, support our staff, and offer
+        meaningful experiences for people from all walks of life.</p>
+      </div>
+      <!-- BLOCK: cta (primary) — anchor jump to the engineered form below -->
+      <p class="blk-cta">
+        <a href="#give" class="btn btn-primary btn-lg">Give online now</a>
+      </p>
+    </div>
+
+    <!-- BLOCK: heading (level 2) -->
+    <h2 class="blk-heading">A Shared Responsibility</h2>
+    <!-- BLOCK: text -->
+    <div class="blk-text prose">
+      <p>Karmê Chöling belongs to the community that practices here.</p>
+      <p>If this place has supported your meditation, your learning, your
+      friendships, or your path — we invite you to help sustain it now.</p>
+      <p>Your generosity is precious.</p>
+    </div>
+
+    <hr>
+
+    <!-- ===============================================================
+         "GIVE ONLINE" — the engineered donation backing form (§9).
+         This is the DonateIndexView panel: the ONE place a CMS page
+         embeds an engineered form rather than prose. It is the real
+         Ominus donate rail. Form POSTs to /donate/give → 303 to PayPal;
+         /webhooks/paypal records the gift on capture. Ominus is the
+         system of record and issues its own 501(c)(3) receipt.
+
+         The legacy CiviCRM → Shambhala USA/Canada drop-downs from the
+         director's source are REPLACED by this single Ominus rail.
+         =============================================================== -->
+    <h2 class="blk-heading" id="give">Give Online</h2>
+    <p class="blk-text prose">
+      Make your gift securely below. Choose an amount and the fund you'd like to
+      support; Karmê Chöling records your gift directly and sends your year-end
+      tax receipt — your donation comes to us in full.
+    </p>
+
+    <!-- Hidden fields (_csrf, proof-of-work, honeypot) are injected by the
+         engineered handler in production; omitted in this static preview.
+         action + method are the real ones. -->
+    <form class="donate-panel" id="donate-form" method="POST"
+          action="https://kcl-engine.karmecholing-dev.org/donate/give"
+          aria-labelledby="give">
+
+      <fieldset>
+        <legend>Amount</legend>
+        <div class="donate-amounts">
+          <label><input type="radio" name="amount_tier" value="25"> $25</label>
+          <label><input type="radio" name="amount_tier" value="50"> $50</label>
+          <label><input type="radio" name="amount_tier" value="108" checked> $108</label>
+          <label><input type="radio" name="amount_tier" value="250"> $250</label>
+          <label><input type="radio" name="amount_tier" value="custom"> Other amount</label>
+        </div>
+        <div style="margin-top:0.75rem;">
+          <label for="don-custom">Custom amount (USD)</label>
+          <input type="number" id="don-custom" name="amount_custom" min="1" max="100000" step="1" placeholder="e.g. 500">
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Direct my gift to</legend>
+        <label for="don-program">Fund</label>
+        <!-- Populated from FUNDRAISING-category programs (accepts_donations).
+             "Area of Greatest Need" = the General Fund (migration 00112), the
+             default for unattributed gifts. Restricted funds appear here only
+             while a campaign is live (ADR-069). -->
+        <select id="don-program" name="program_id">
+          <option value="">Area of Greatest Need (General Fund)</option>
+          <option value="scholarship">Scholarship &amp; Access Fund</option>
+          <option value="land">Land &amp; Facilities Care</option>
+          <option value="retreats">Retreat Programs</option>
+        </select>
+      </fieldset>
+
+      <!-- §25 Q-PRIV2: anonymous by DEFAULT unless explicit consent — the
+           UNCHECKED state sends anon:1 in the PayPal passthrough, flipping
+           both anonymity flags off. -->
+      <label class="donate-consent">
+        <input type="checkbox" name="display_consent" value="1">
+        <span>You may acknowledge my gift publicly by name.</span>
+      </label>
+
+      <button type="submit" class="btn btn-primary btn-lg">Donate with PayPal</button>
+
+      <!-- Real v1 rails: PayPal (one-time), Venmo (rides PayPal, ADR-070),
+           Zelle (manual record, instructions below). -->
+      <div class="donate-rails" aria-label="Accepted online payment methods">
+        <span class="pay-chip">PayPal</span>
+        <span class="pay-chip">Venmo</span>
+        <span class="pay-chip">Zelle</span>
+        <span class="pay-chip">Check by mail</span>
+      </div>
+
+      <p class="donate-note" style="margin-top:0.75rem;">
+        One-time gifts are processed through PayPal (Venmo rides the same
+        checkout). To give by <strong>Zelle</strong>, send to
+        <a href="mailto:development@karmecholing.org">development@karmecholing.org</a>
+        and let us know so we can record and acknowledge your gift. Prefer to
+        give by check? Mail to Karmê Chöling, 369 Patneaude Lane, Barnet, VT
+        05821. For <strong>monthly</strong> giving, please contact the
+        Development team — we'll set up your sustaining gift with you.
+      </p>
+
+      <p class="donate-receipt-note">
+        <strong>Your tax receipt:</strong> Karmê Chöling is the recipient of
+        record and issues your year-end consolidated 501(c)(3) tax
+        acknowledgment directly. Signed-in donors can download receipts anytime
+        from
+        <a href="https://kcl-engine.karmecholing-dev.org/account/donations">your account</a>.
+        100% of your gift supports Karmê Chöling.
+      </p>
+    </form>
+
+    <hr>
+
+    <!-- BLOCK: heading (level 3) + text -->
+    <h3 class="blk-heading">Your generous support keeps Karmê Chöling thriving</h3>
+    <div class="blk-text prose">
+      <p>Whether you give once or become a sustaining donor, your gift supports:</p>
+      <ul>
+        <li>retreat programs for beginners and longtime meditators that meet this moment;</li>
+        <li>care and improvement of our retreat spaces;</li>
+        <li>scholarships and expanded access; and</li>
+        <li>long-term stewardship of this precious practice destination and sacred land.</li>
+      </ul>
+    </div>
+
+    <!-- BLOCK: columns (3 columns; each a heading + text). The three named
+         giving levels, grounded in real Ominus behavior. -->
+    <div class="blk-columns blk-columns--3">
+      <div class="blk-column">
+        <h3 class="blk-heading">One-Time Gifts</h3>
+        <div class="blk-text">
+          <p>Make a contribution in any amount using the form above. Every gift
+          strengthens our mission and, by default, is directed to the area of
+          greatest need. Want it applied to a specific purpose? Choose a fund in
+          the form, or note it when you give by check at Karmê Chöling, 369
+          Patneaude Lane, Barnet, VT 05821.</p>
+        </div>
+      </div>
+      <div class="blk-column">
+        <h3 class="blk-heading">Transformational Gifts</h3>
+        <div class="blk-text">
+          <p>Leadership gifts make meaningful progress possible — addressing
+          major repairs, building reserves, strengthening long-term
+          sustainability, and supporting significant program initiatives. To
+          discuss a leadership gift, contact us confidentially at
+          <a href="mailto:development@karmecholing.org">development@karmecholing.org</a>.</p>
+        </div>
+      </div>
+      <div class="blk-column">
+        <h3 class="blk-heading">Recurring (Monthly) Giving</h3>
+        <div class="blk-text">
+          <p>Monthly support provides steady, reliable funding that allows
+          thoughtful planning and long-term care. Becoming a sustaining donor is
+          one of the most impactful ways to ensure Karmê Chöling thrives for
+          generations to come. We set up sustaining gifts personally — to start,
+          adjust, or pause a recurring gift, contact
+          <a href="mailto:development@karmecholing.org">development@karmecholing.org</a>.
+          You can manage an existing recurring gift anytime from
+          <a href="https://kcl-engine.karmecholing-dev.org/account/donations">your account</a>.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- BLOCK: text — the register→donation bridge (the Generosity tier).
+         A real Ominus capability worth surfacing on a development page. -->
+    <div class="blk-text prose">
+      <p class="text-soft"><strong>Giving while you register:</strong> when you
+      sign up for a program, you can choose our <em>Generosity</em> rate —
+      paying a little more so someone else can attend at a reduced rate. The
+      additional amount becomes a tax-deductible donation to our scholarship and
+      access work.
+      <a href="https://kcl-engine.karmecholing-dev.org/programs">Browse programs →</a></p>
+    </div>
+
+    <hr>
+
+    <!-- BLOCK: heading (level 2) + accordion
+         The director's "More Ways to Give (accordion drop-down)" — on the real
+         Accordion block (native <details>, §28 disclosure). -->
+    <h2 class="blk-heading" id="more-ways">More Ways to Give</h2>
+    <div class="blk-accordion">
+
+      <details class="blk-accordion-item">
+        <summary>1. Planned &amp; Legacy Giving</summary>
+        <div class="blk-accordion-body">
+          <p>Some practitioners choose to extend their generosity beyond their
+          lifetime. By including Karmê Chöling in your estate plans, you help
+          sustain the retreat center, its teachings, and future generations of
+          practitioners.</p>
+          <p>Planned gifts can also offer meaningful financial and tax benefits.
+          Options may include:</p>
+          <ul>
+            <li>A bequest in your will or trust</li>
+            <li>Naming Karmê Chöling as a beneficiary of a retirement account or life insurance policy</li>
+            <li>Charitable Gift Annuities</li>
+          </ul>
+          <p>We encourage you to consult your financial and legal advisors to
+          determine what is best for you. If you choose to include Karmê Chöling
+          in your plans, please let us know at
+          <a href="mailto:development@karmecholing.org">development@karmecholing.org</a>
+          so we can express our gratitude and ensure your intentions are
+          honored.</p>
+          <p>If you are just beginning to explore planned giving, we are happy
+          to connect you with John Murphy
+          (<a href="mailto:jmartinmurphy@gmail.com">jmartinmurphy@gmail.com</a>),
+          a Sangha member from Philadelphia and the Planned Giving Consultant
+          for Shambhala Global. He is knowledgeable about a range of options,
+          including Charitable Gift Annuities, and can help you understand how
+          different vehicles may support both your financial wellbeing and your
+          wish to give.</p>
+        </div>
+      </details>
+
+      <details class="blk-accordion-item">
+        <summary>2. Gifts of Stock, Bonds, Securities, Mutual Funds</summary>
+        <div class="blk-accordion-body">
+          <p>Donating appreciated stock is an easy and tax-wise way to support
+          Karmê Chöling.</p>
+          <p><strong>Step 1: Notify Us.</strong> Before you transfer shares,
+          email us at
+          <a href="mailto:development@karmecholing.org">development@karmecholing.org</a>
+          so we can properly track and acknowledge your gift. Please include
+          your full name, the name of the stock, the number of shares, and your
+          broker's name.</p>
+          <p><strong>Step 2: We'll Provide Our Account Information for Your
+          Broker.</strong> Your broker can transfer the shares directly to our
+          <em>Charles Schwab</em> account.</p>
+          <p>Once the transfer is complete, we will send you a written
+          acknowledgment for your tax records.</p>
+        </div>
+      </details>
+
+      <details class="blk-accordion-item">
+        <summary>3. Employer Matching Gifts</summary>
+        <div class="blk-accordion-body">
+          <p>Matching gift programs are a simple way to maximize your
+          contribution at no additional cost to you. Many employers will match
+          your charitable donation, potentially doubling your gift's impact.</p>
+          <p><strong>How to get started:</strong> Check with your employer's
+          human resources department to see if your company participates in a
+          matching gift program. Many corporations, foundations, and even some
+          small businesses offer this benefit to employees.</p>
+          <p><strong>Need assistance?</strong> Email us at
+          <a href="mailto:development@karmecholing.org">development@karmecholing.org</a>
+          so we can help you navigate the matching gift process and connect with
+          your employer's program.</p>
+        </div>
+      </details>
+
+      <details class="blk-accordion-item">
+        <summary>4. In-Kind Donations &amp; Volunteer Service</summary>
+        <div class="blk-accordion-body">
+          <p>Generosity takes many forms. In addition to financial
+          contributions, Karmê Chöling gratefully welcomes in-kind donations and
+          the gift of volunteer expertise.</p>
+          <p>"In-kind" support may include:</p>
+          <ul>
+            <li>Skilled trades (carpentry, electrical, plumbing, landscaping)</li>
+            <li>Professional services (design, photography, marketing, technology)</li>
+            <li>Donated materials or equipment</li>
+            <li>Creative, administrative, and program support</li>
+            <li>Hands-on "sweat equity" for seasonal projects and campus improvements</li>
+          </ul>
+          <p>Because we are a retreat center with ongoing facilities and program
+          needs, skilled volunteer service can make a meaningful and lasting
+          impact. Your time and expertise directly support the life of the
+          center.</p>
+          <p>To learn about current needs or to schedule a volunteer project
+          visit, please contact us at
+          <a href="mailto:development@karmecholing.org">development@karmecholing.org</a>.</p>
+        </div>
+      </details>
+
+    </div>
+
+    <hr>
+
+    <!-- BLOCK: heading (level 2) + text  ("Why Your Donation Matters") -->
+    <h2 class="blk-heading">Why Your Donation Matters</h2>
+    <div class="blk-text prose">
+      <p>Your support helps keep the doors of Karmê Chöling open as a welcoming
+      place for practice and community. With generous donations we are able to:</p>
+      <ul>
+        <li>Offer deep retreat experiences across tradition and experience levels.</li>
+        <li>Maintain and care for our historic Vermont land and facilities.</li>
+        <li>Create access programs to widen participation and support those in need.</li>
+      </ul>
+      <p>Every gift helps ensure that this sacred space continues to thrive as a
+      refuge and place of learning.</p>
+    </div>
+
+    <!-- BLOCK: quote — the closing gratitude line, as a pull-quote -->
+    <blockquote class="blk-quote">
+      <p>Thank you for your kind consideration.</p>
+      <footer>— Karmê Chöling Development Office</footer>
+    </blockquote>
+
+    <hr>
+
+    <!-- BLOCK: heading (level 2) + columns(2): contact prose + a contact card -->
+    <h2 class="blk-heading" id="contact">Contact &amp; Questions</h2>
+    <div class="blk-columns blk-columns--2">
+      <div class="blk-column">
+        <div class="blk-text">
+          <p>For assistance with your donation, planned giving, or matching
+          gifts, please reach out — we're glad to help.</p>
+          <p><strong>Development Office</strong><br>
+          <a href="mailto:development@karmecholing.org">development@karmecholing.org</a></p>
+        </div>
+      </div>
+      <div class="blk-column">
+        <div class="blk-text">
+          <div class="contact-card">
+            <p><strong>Elissa Kane</strong><br>Director of Development</p>
+            <p><a href="mailto:ekane@karmecholing.org">ekane@karmecholing.org</a></p>
+            <p><a href="tel:+15182486291">518-248-6291</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr>
+
+    <!-- BLOCK: text — the 501(c)(3) deductibility note (the director's footer
+         line; kept as a final body text block) -->
+    <div class="blk-text prose">
+      <p class="text-soft">
+        As a <strong>Section 501(c)(3)</strong> organization, your gifts are
+        <strong>tax-deductible to the full extent allowed by law</strong>.
+      </p>
+    </div>
+
+  </main>
+
+  <!-- ===================================================================
+       FOOTER — §7 SiteFooter (components/site_footer.templ). Exact structure:
+       brand/address/phone · About/Contact/Search/Privacy/Terms ·
+       sitemap (3 hubs + All Programs/Teachers/Visit/Donate) · newsletter ·
+       social · copyright.
+       =================================================================== -->
+  <footer class="site-footer">
+    <div class="site-footer-inner">
+      <div>
+        <p class="site-footer-brand">Karmê Chöling</p>
+        <p>369 Patneaude Lane, Barnet, VT 05821</p>
+        <p><a href="tel:+18026334440">802-633-4440</a></p>
+      </div>
+
+      <ul class="site-footer-links" aria-label="Footer">
+        <li><a href="https://kcl-engine.karmecholing-dev.org/about">About</a></li>
+        <li><a href="https://kcl-engine.karmecholing-dev.org/contact">Contact</a></li>
+        <li><a href="https://kcl-engine.karmecholing-dev.org/search">Search</a></li>
+        <li><a href="https://kcl-engine.karmecholing-dev.org/policy/privacy">Privacy</a></li>
+        <li><a href="https://kcl-engine.karmecholing-dev.org/policy/terms">Terms</a></li>
+      </ul>
+
+      <nav aria-label="Sitemap">
+        <ul class="site-footer-sitemap">
+          <li><a href="https://kcl-engine.karmecholing-dev.org/rest-and-heal">Rest &amp; Heal</a></li>
+          <li><a href="https://kcl-engine.karmecholing-dev.org/learn-to-meditate">Learn to Meditate</a></li>
+          <li><a href="https://kcl-engine.karmecholing-dev.org/go-on-retreat">Go on Retreat</a></li>
+          <li><a href="https://kcl-engine.karmecholing-dev.org/programs">All Programs</a></li>
+          <li><a href="https://kcl-engine.karmecholing-dev.org/teachers">Teachers</a></li>
+          <li><a href="https://kcl-engine.karmecholing-dev.org/visit">Visit</a></li>
+          <li><a href="https://kcl-engine.karmecholing-dev.org/donate">Donate</a></li>
+        </ul>
+      </nav>
+
+      <form class="site-footer-newsletter" method="POST"
+            action="https://kcl-engine.karmecholing-dev.org/newsletter/subscribe">
+        <label for="footer-newsletter-email">Newsletter</label>
+        <input type="email" id="footer-newsletter-email" name="email"
+               placeholder="your@email.com" autocomplete="email" required>
+        <button type="submit" class="btn">Subscribe</button>
+      </form>
+
+      <p class="site-footer-copyright">© 2026 Karmê Chöling</p>
+    </div>
+  </footer>
+
+</body>
+</html>
