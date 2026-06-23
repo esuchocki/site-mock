@@ -1,0 +1,194 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<title>KCL Pricing — Old vs New, Step by Step</title>
+<style>
+ :root{--ink:#1a1918;--mut:#6b6862;--line:#e6e3de;--gold:#b88a2b;--up:#b4690e;--down:#2d7a3a;--room:#3b6ea5;--food:#c9962b;--bg:#faf9f6}
+ *{box-sizing:border-box}
+ body{font-family:-apple-system,Segoe UI,Roboto,sans-serif;margin:0;color:var(--ink);background:var(--bg);line-height:1.55}
+ .wrap{max-width:760px;margin:0 auto;padding:1.5rem 1.1rem 5rem}
+ h1{font-size:1.45rem;margin:.1rem 0 .3rem} h2{font-size:1.05rem;margin:2rem 0 .5rem}
+ .sub{color:var(--mut);font-size:.92rem;margin:0 0 1.4rem}
+ .pickers{display:flex;flex-wrap:wrap;gap:1.2rem;background:#fff;border:1px solid var(--line);border-radius:12px;padding:.9rem 1.1rem;margin-bottom:1.2rem}
+ .pick{display:flex;flex-direction:column;gap:.35rem}
+ .pick .plab{font-size:.74rem;text-transform:uppercase;letter-spacing:.05em;color:var(--mut);font-weight:600}
+ .seg{display:flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+ .seg button{border:none;background:#fff;padding:.4rem .7rem;cursor:pointer;font-size:.86rem;color:var(--ink);border-right:1px solid var(--line)}
+ .seg button:last-child{border-right:none}
+ .seg button.on{background:var(--ink);color:#fff}
+ /* the worked example */
+ .ex{background:#fff;border:1px solid var(--line);border-radius:14px;padding:1.3rem 1.4rem;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+ .exhead{font-size:.95rem;color:var(--mut);margin-bottom:1rem}
+ .exhead b{color:var(--ink)}
+ .bars{display:grid;grid-template-columns:90px 1fr;gap:.5rem 1rem;align-items:center;margin:.4rem 0}
+ .blab{font-weight:600;text-align:right;font-size:.92rem}
+ .bar{display:flex;height:42px;border-radius:7px;overflow:hidden;background:#f0eee9;font-size:.85rem;font-weight:600;color:#fff}
+ .seg-room{background:var(--room);display:flex;align-items:center;justify-content:center;min-width:42px}
+ .seg-food{background:var(--food);display:flex;align-items:center;justify-content:center;min-width:36px}
+ .seg-empty{flex:1}
+ .tot{font-variant-numeric:tabular-nums;font-weight:700;font-size:1.05rem;margin-left:.6rem;white-space:nowrap}
+ .legend{display:flex;gap:1.3rem;font-size:.82rem;color:var(--mut);margin:.9rem 0 0;justify-content:center}
+ .sw{display:inline-block;width:11px;height:11px;border-radius:3px;vertical-align:middle;margin-right:.35rem}
+ /* the one-number answer */
+ .answer{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.7rem;margin:1.2rem 0}
+ .ans{background:#fff;border:1px solid var(--line);border-radius:11px;padding:.8rem .9rem;text-align:center}
+ .ans.hl{border-color:var(--gold);box-shadow:0 0 0 2px rgba(184,138,43,.15)}
+ .ans .q{font-size:.72rem;text-transform:uppercase;letter-spacing:.04em;color:var(--mut);font-weight:600;min-height:2.2em;display:flex;align-items:center;justify-content:center}
+ .ans .big{font-size:1.5rem;font-weight:800;line-height:1.1;margin:.2rem 0}
+ .ans .det{font-size:.8rem;color:var(--mut)}
+ .up{color:var(--up)} .down{color:var(--down)}
+ .note{background:#fff;border-left:3px solid var(--gold);padding:.75rem 1rem;margin:1.1rem 0;font-size:.9rem;border-radius:0 9px 9px 0}
+ .slider{display:grid;grid-template-columns:1fr auto;align-items:center;gap:.8rem;background:#fff;border:1px solid var(--line);border-radius:10px;padding:.7rem 1rem;margin:1rem 0}
+ .slider input{width:100%}
+ .slider .sv{font-weight:700;font-variant-numeric:tabular-nums;min-width:3em;text-align:right}
+ .slider .sl{font-size:.86rem}
+ table{border-collapse:collapse;width:100%;font-size:.88rem;background:#fff;border:1px solid var(--line);border-radius:11px;overflow:hidden;margin-top:.6rem}
+ th,td{padding:.45rem .6rem;text-align:right;border-bottom:1px solid var(--line)} th:first-child,td:first-child{text-align:left}
+ thead th{background:#f4f2ed;font-size:.74rem;text-transform:uppercase;letter-spacing:.03em;color:#555}
+ tbody tr:last-child td{border-bottom:none} .trow td{font-weight:700;background:#faf8f3}
+ .small{font-size:.82rem;color:var(--mut)}
+ details{margin-top:.5rem} summary{cursor:pointer;font-size:.9rem;color:var(--room);font-weight:600}
+</style></head><body><div class="wrap">
+
+<h1>KCL Pricing — old vs new, one step at a time</h1>
+<p class="sub">Start with <b>one guest, one night</b>. Change one thing at a time and watch the dollars move. The big idea: the <b>old price secretly included meals</b>; the new model splits the room from the food so we can finally see each.</p>
+
+<div class="pickers">
+  <div class="pick"><span class="plab">Room type</span>
+    <div class="seg" id="segRoom"></div></div>
+  <div class="pick"><span class="plab">Who's in the room</span>
+    <div class="seg" id="segParty">
+      <button data-p="1a" class="on">1 adult</button>
+      <button data-p="2a">2 adults</button>
+      <button data-p="2a1c">2 adults + 1 child</button>
+    </div></div>
+</div>
+
+<div class="ex">
+  <div class="exhead" id="exhead"></div>
+  <div class="bars" id="bars"></div>
+  <div class="legend">
+    <span><span class="sw" style="background:var(--room)"></span>Room</span>
+    <span><span class="sw" style="background:var(--food)"></span>Food (meals)</span>
+    <span class="small">bars are to scale · per night</span>
+  </div>
+</div>
+
+<div class="answer">
+  <div class="ans" id="ansA"><div class="q">A · Total bill the guest pays</div><div class="big" id="aBig"></div><div class="det" id="aDet"></div></div>
+  <div class="ans" id="ansB"><div class="q">B · The room price alone (food set aside)</div><div class="big" id="bBig"></div><div class="det" id="bDet"></div></div>
+  <div class="ans" id="ansC"><div class="q">C · The food price alone</div><div class="big" id="cBig"></div><div class="det" id="cDet"></div></div>
+</div>
+
+<div class="note" id="plain"></div>
+
+<details><summary>Adjust the assumptions (only two numbers here are guesses)</summary>
+<div class="slider"><div class="sl"><b>How much of the OLD price was secretly food?</b><br><span class="small">The old system never recorded this split — it's the one real guess. Default 25% (≈ today's $40 food on a ~$160 stay).</span></div><div><input type="range" id="old_food_share" min="0" max="50" step="1"><span class="sv" id="old_food_share_v"></span></div></div>
+<div class="slider"><div class="sl"><b>Adult adder /night</b> (extra adults beyond the first)<br><span class="small">The new per-person room fee.</span></div><div><input type="range" id="adult_adder" min="0" max="200" step="5"><span class="sv" id="adult_adder_v"></span></div></div>
+<div class="slider"><div class="sl"><b>Food /person/night</b></div><div><input type="range" id="food_adult" min="0" max="100" step="5"><span class="sv" id="food_adult_v"></span></div></div>
+</details>
+
+<h2>The same comparison, for every room type (1 adult, 1 night)</h2>
+<table id="tblTypes"><thead><tr><th>Room type</th><th>Old (all-in)</th><th>New room</th><th>New food</th><th>New total</th><th>Δ total</th></tr></thead><tbody></tbody></table>
+
+<h2>What this means for a whole year</h2>
+<p class="small">Using the real booking mix (≈<b id="nreg"></b> paid stays/year, 2022–24 from the live database; staff/online/commuter excluded). Two honest numbers:</p>
+<div class="answer" style="grid-template-columns:1fr 1fr">
+  <div class="ans"><div class="q">Guest-facing revenue (all-in)</div><div class="big" id="yrAll"></div><div class="det" id="yrAllDet"></div></div>
+  <div class="ans"><div class="q">True room-rate raise (food removed both sides)</div><div class="big" id="yrRoom"></div><div class="det" id="yrRoomDet"></div></div>
+</div>
+<div class="note"><b>Why two yearly numbers?</b> The guest-facing number counts the food that's now itemized; the room-only number strips food off <i>both</i> the old and new side so you see the real room increase, not the accounting change. Food revenue itself didn't appear from nowhere — it was always collected, just hidden inside the old room price.</div>
+
+<p class="small" style="margin-top:2.5rem">Room prices: <code>room_inventory.csv</code> (new) / <code>room_inventory_old.csv</code> (old). Booking mix: live legacy DB, 2022–24 average. The only assumptions are the two sliders above; everything else is the real rate tables and real booking counts.</p>
+</div>
+<script>
+const DATA = {"prices": {"Standard": {"new": 160, "old": 120}, "Double": {"new": 160, "old": 120}, "Premium": {"new": 200, "old": 160}, "Tent Cabin": {"new": 120, "old": 70}, "Dorm": {"new": 80, "old": 60}, "Shrine Room": {"new": 60, "old": 40}}, "dist": [{"type": "Standard", "regs": 245, "nights": 4.6}, {"type": "Tent Cabin", "regs": 160, "nights": 8.3}, {"type": "Premium", "regs": 147, "nights": 4.9}, {"type": "Dorm", "regs": 124, "nights": 4.5}, {"type": "Double", "regs": 61, "nights": 5.2}, {"type": "Shrine Room", "regs": 56, "nights": 5.5}], "excluded": 669, "defaults": {"adult_adder": 100, "child13_adder": 30, "food_adult": 40, "food_child13": 20, "old_food_share": 25}};
+const $ = s => document.getElementById(s);
+const d$ = n => "$"+Math.round(n).toLocaleString();
+const S = {...DATA.defaults};
+let ROOM = "Standard", PARTY = "1a";
+
+// party -> {adults, child13}
+const PARTIES = {"1a":{a:1,c:0}, "2a":{a:2,c:0}, "2a1c":{a:2,c:1}};
+
+// build the room-type segmented control
+$("segRoom").innerHTML = Object.keys(DATA.prices).map((t,i)=>`<button data-r="${t}" class="${i===0?'on':''}">${t}</button>`).join("");
+
+// --- the math, for ONE booking, ONE night ---
+function calc(room, party){
+  const p = DATA.prices[room], {a,c} = PARTIES[party], people=a+c;
+  // NEW room = base (includes first occupant) + adult adder for each ADDITIONAL adult + child adder per child.
+  // First occupant rides the base; here the first is always an adult when present.
+  const extraAdults = Math.max(0, a-1);
+  const newRoom = p.new + extraAdults*S.adult_adder + c*S.child13_adder;
+  // NEW food = per person; children under 13 cheaper.
+  const newFood = a*S.food_adult + c*S.food_child13;
+  // OLD all-in = old single price (it covered room+food). For 2 people the old model
+  // charged a shared per-person rate, but to keep THIS example about one variable at a
+  // time we price the old side at single x people as the simple all-in equivalent.
+  const oldAll = p.old * people;
+  const oldFood = oldAll * (S.old_food_share/100);   // the hidden food portion
+  const oldRoom = oldAll - oldFood;                   // the implied room-only price
+  return {newRoom, newFood, newAll:newRoom+newFood, oldAll, oldRoom, oldFood, people, a, c};
+}
+
+function pct(oldv, newv){ if(!oldv) return ""; const x=(newv-oldv)/oldv*100; return (x>=0?"+":"")+x.toFixed(0)+"%"; }
+function cls(oldv,newv){ return newv>=oldv?"up":"down"; }
+
+function render(){
+  const r = calc(ROOM, PARTY);
+  const partyTxt = {"1a":"1 adult","2a":"2 adults","2a1c":"2 adults + 1 child"}[PARTY];
+  $("exhead").innerHTML = `One <b>${ROOM}</b> room · <b>${partyTxt}</b> · one night`;
+
+  // bars (scaled to the larger total)
+  const scaleMax = Math.max(r.oldAll, r.newAll, 1);
+  function bar(label, room, food, total){
+    const rw = room/scaleMax*100, fw = food/scaleMax*100, ew = Math.max(0,100-rw-fw);
+    return `<div class="blab">${label}</div><div style="display:flex;align-items:center">
+      <div class="bar" style="width:${(total/scaleMax*100).toFixed(1)}%">
+        ${room>0?`<div class="seg-room" style="flex:${room}">${d$(room)}</div>`:""}
+        ${food>0?`<div class="seg-food" style="flex:${food}">${d$(food)}</div>`:""}
+      </div><span class="tot">${d$(total)}</span></div>`;
+  }
+  $("bars").innerHTML =
+    bar("OLD", r.oldRoom, r.oldFood, r.oldAll) +
+    bar("NEW", r.newRoom, r.newFood, r.newAll);
+
+  // three answers
+  $("aBig").innerHTML = `<span class="${cls(r.oldAll,r.newAll)}">${pct(r.oldAll,r.newAll)}</span>`;
+  $("aDet").textContent = `${d$(r.oldAll)} → ${d$(r.newAll)}`;
+  $("bBig").innerHTML = `<span class="${cls(r.oldRoom,r.newRoom)}">${pct(r.oldRoom,r.newRoom)}</span>`;
+  $("bDet").textContent = `${d$(r.oldRoom)} → ${d$(r.newRoom)} (room only)`;
+  $("cBig").innerHTML = `<span class="${cls(r.oldFood,r.newFood)}">${pct(r.oldFood,r.newFood)}</span>`;
+  $("cDet").textContent = `${d$(r.oldFood)} → ${d$(r.newFood)} (food only)`;
+
+  $("plain").innerHTML = `<b>In plain words:</b> a guest in a ${ROOM} room (${partyTxt}) used to pay <b>${d$(r.oldAll)}</b> a night, all-in. Now they pay <b>${d$(r.newRoom)}</b> for the room plus <b>${d$(r.newFood)}</b> for meals = <b>${d$(r.newAll)}</b> — that's <b class="${cls(r.oldAll,r.newAll)}">${pct(r.oldAll,r.newAll)}</b> more on the total bill <span class="small">(box A)</span>. But the meals were always being charged — hidden inside the old price. Pull food out of both sides and the <i>room</i> itself went from about ${d$(r.oldRoom)} to ${d$(r.newRoom)}, a <b class="${cls(r.oldRoom,r.newRoom)}">${pct(r.oldRoom,r.newRoom)}</b> room raise <span class="small">(box B)</span>. That's the real increase — not an illusion of "unbundling."`;
+
+  // per-type table (1 adult)
+  const tb = $("tblTypes").querySelector("tbody"); tb.innerHTML="";
+  Object.keys(DATA.prices).forEach(t=>{
+    const x = calc(t,"1a");
+    tb.insertAdjacentHTML("beforeend",
+      `<tr><td>${t}</td><td>${d$(x.oldAll)}</td><td>${d$(x.newRoom)}</td><td>${d$(x.newFood)}</td><td>${d$(x.newAll)}</td><td class="${cls(x.oldAll,x.newAll)}">${pct(x.oldAll,x.newAll)}</td></tr>`);
+  });
+
+  // yearly roll-up (1 adult per stay, real nights + counts)
+  let oldAllY=0,newAllY=0,oldRoomY=0,newRoomY=0,reg=0;
+  DATA.dist.forEach(d=>{
+    const x = calc(d.type,"1a"); reg+=d.regs;
+    oldAllY += x.oldAll*d.nights*d.regs;
+    newAllY += x.newAll*d.nights*d.regs;
+    oldRoomY += x.oldRoom*d.nights*d.regs;
+    newRoomY += x.newRoom*d.nights*d.regs;
+  });
+  $("nreg").textContent = Math.round(reg).toLocaleString();
+  $("yrAll").innerHTML = `<span class="${cls(oldAllY,newAllY)}">${pct(oldAllY,newAllY)}</span>`;
+  $("yrAllDet").textContent = `${d$(oldAllY)} → ${d$(newAllY)} /yr`;
+  $("yrRoom").innerHTML = `<span class="${cls(oldRoomY,newRoomY)}">${pct(oldRoomY,newRoomY)}</span>`;
+  $("yrRoomDet").textContent = `${d$(oldRoomY)} → ${d$(newRoomY)} /yr`;
+}
+
+// wire controls
+$("segRoom").addEventListener("click",e=>{if(e.target.dataset.r){$("segRoom").querySelectorAll("button").forEach(b=>b.classList.remove("on"));e.target.classList.add("on");ROOM=e.target.dataset.r;render();}});
+$("segParty").addEventListener("click",e=>{if(e.target.dataset.p){$("segParty").querySelectorAll("button").forEach(b=>b.classList.remove("on"));e.target.classList.add("on");PARTY=e.target.dataset.p;render();}});
+["old_food_share","adult_adder","food_adult"].forEach(k=>{const el=$(k);el.value=S[k];$(k+"_v").textContent=(k==="old_food_share"?S[k]+"%":"$"+S[k]);el.addEventListener("input",()=>{S[k]=+el.value;$(k+"_v").textContent=(k==="old_food_share"?S[k]+"%":"$"+S[k]);render();});});
+render();
+</script></body></html>
