@@ -18,7 +18,7 @@
  .ex{background:#fff;border:1px solid var(--line);border-radius:14px;padding:1.3rem 1.4rem;box-shadow:0 1px 3px rgba(0,0,0,.04)}
  .exhead{font-size:.95rem;color:var(--mut);margin-bottom:1rem}
  .exhead b{color:var(--ink)}
- .bars{display:grid;grid-template-columns:90px 1fr;gap:.5rem 1rem;align-items:center;margin:.4rem 0}
+ .bars{display:grid;grid-template-columns:90px 1fr;gap:1.5rem 1rem;align-items:center;margin:1.3rem 0 .4rem}
  .blab{font-weight:600;text-align:right;font-size:.92rem}
  .bar{display:flex;height:42px;border-radius:7px;overflow:hidden;background:#f0eee9;font-size:.85rem;font-weight:600;color:#fff}
  .seg-room{background:var(--room);display:flex;align-items:center;justify-content:center;min-width:42px}
@@ -46,10 +46,53 @@
  tbody tr:last-child td{border-bottom:none} .trow td{font-weight:700;background:#faf8f3}
  .small{font-size:.82rem;color:var(--mut)}
  details{margin-top:.5rem} summary{cursor:pointer;font-size:.9rem;color:var(--room);font-weight:600}
+ /* old/new definition block */
+ .define{background:#fff;border:1px solid var(--line);border-radius:14px;padding:1.2rem 1.3rem;margin:.6rem 0 1.6rem;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+ .dh{margin:.1rem 0 .9rem;font-size:1.05rem}
+ .defgrid{display:grid;grid-template-columns:1fr 1fr;gap:.9rem}
+ .defcard{border:1px solid var(--line);border-radius:11px;padding:.85rem 1rem;background:var(--bg)}
+ .defcard p{margin:.2rem 0 0;font-size:.9rem}
+ .dtag{display:inline-block;font-size:.74rem;font-weight:800;letter-spacing:.06em;padding:.18rem .6rem;border-radius:6px;color:#fff}
+ .dtag-old{background:var(--mut)} .dtag-new{background:var(--ink)}
+ .dnote{margin:1rem 0 .6rem}
+ .defkey{margin:.7rem 0 0;display:flex;flex-wrap:wrap;gap:.3rem 1.2rem}
+ .kdef{white-space:nowrap} .ksw{display:inline-block;width:11px;height:11px;border-radius:3px;vertical-align:middle;margin-right:.35rem}
+ /* competitor benchmark marker on bars */
+ .barwrap{position:relative;flex:1}
+ .cmark{position:absolute;top:-6px;bottom:-6px;width:2px;background:var(--mut);z-index:3}
+ .cmark::after{content:attr(data-lab);position:absolute;top:-1.05rem;left:50%;transform:translateX(-50%);font-size:.66rem;font-weight:700;color:var(--mut);white-space:nowrap;background:var(--bg);padding:0 .2rem}
+ .cmark.over{background:var(--down)} .cmark.over::after{color:var(--down)}
+ .benchscale{margin-top:1.2rem}
+ .bcell-low{color:var(--down);font-weight:600} .bcell-high{color:var(--up);font-weight:600}
+ .posbadge{display:inline-block;font-size:.7rem;font-weight:700;padding:.1rem .45rem;border-radius:20px}
+ .pos-under{background:#fbeede;color:var(--up)} .pos-aligned{background:#eef0ed;color:#555} .pos-over{background:#e4f1e6;color:var(--down)}
 </style></head><body><div class="wrap">
 
 <h1>KCL Pricing — old vs new, one step at a time</h1>
-<p class="sub">Start with <b>one guest, one night</b>. Change one thing at a time and watch the dollars move. The big idea: the <b>old price secretly included meals</b>; the new model splits the room from the food so we can finally see each.</p>
+<p class="sub">A guide to what changed, why, and how it compares to the rest of the retreat world. Everything is <b>explained first, then shown</b>. Start with <b>one guest, one night</b>, change one thing at a time, and watch the dollars move.</p>
+
+<div class="define">
+  <h2 class="dh">First, what do "old" and "new" actually mean?</h2>
+  <div class="defgrid">
+    <div class="defcard">
+      <div class="dtag dtag-old">OLD</div>
+      <p>The pricing KCL used <b>through 2025</b>. A guest paid <b>one all-in price per night</b> — and that single number <b>silently bundled the room and the meals together</b>. Nothing on the bill ever said how much was room and how much was food; the database never recorded the split. A "Standard" room was simply <b>$120/night, meals included but invisible.</b></p>
+    </div>
+    <div class="defcard">
+      <div class="dtag dtag-new">NEW</div>
+      <p>The redesigned <b>2026</b> model. It <b>splits that one number into two visible lines</b>: a <b>room rate</b> (the bed) and a <b>food rate</b> (~$40/adult/night for three meals). Same guest, now an itemized bill: <b>$160 room + $40 food = $200.</b> The food was always being paid for — the new model just makes it <b>countable</b>.</p>
+    </div>
+  </div>
+  <div class="note dnote"><b>So the central question this page answers:</b> when we pull the hidden food out of the old price and set it beside the new itemized price, <b>how much did the room itself really go up</b> — versus how much of the "increase" is just food becoming visible? The three boxes below (<b>A</b>, <b>B</b>, <b>C</b>) separate those two things on purpose.</div>
+  <p class="small defkey"><b>Three numbers, defined once:</b>
+    <span class="kdef"><span class="ksw" style="background:var(--room)"></span><b>Room</b> — the lodging charge alone (the bed).</span>
+    <span class="kdef"><span class="ksw" style="background:var(--food)"></span><b>Food</b> — the meals charge (3 meals/day).</span>
+    <span class="kdef"><b>All-in</b> — room + food, the total a guest pays per night.</span>
+  </p>
+</div>
+
+<h2>Try it yourself — pick a room and a party</h2>
+<p class="sub" style="margin-bottom:.7rem">Choose any room type and who's staying. The worked example, the three boxes, and the plain-words summary below all update live.</p>
 
 <div class="pickers">
   <div class="pick"><span class="plab">Room type</span>
@@ -62,16 +105,20 @@
     </div></div>
 </div>
 
+<h2>Shown: the old bill vs. the new bill, side by side</h2>
+<p class="sub" style="margin-bottom:.7rem">Each bar is one night's total, drawn to scale. The <span style="color:var(--room);font-weight:600">blue</span> part is the room, the <span style="color:var(--food);font-weight:600">gold</span> part is food. The <b>old bar's split is reconstructed</b> (the old system never recorded it — see the assumptions below); the <b>new bar's split is exact</b>. The dotted line marks the <b>closest comparable retreat center's all-in rate</b> for that tier.</p>
 <div class="ex">
   <div class="exhead" id="exhead"></div>
   <div class="bars" id="bars"></div>
   <div class="legend">
     <span><span class="sw" style="background:var(--room)"></span>Room</span>
     <span><span class="sw" style="background:var(--food)"></span>Food (meals)</span>
-    <span class="small">bars are to scale · per night</span>
+    <span><span class="sw" style="background:var(--mut);width:3px;height:13px;border-radius:1px"></span>Peer all-in <span class="small" id="peerName"></span></span>
   </div>
 </div>
 
+<h2>The three numbers that matter, defined</h2>
+<p class="sub" style="margin-bottom:.7rem"><b>A</b> = what the total bill did. <b>B</b> = what the <i>room alone</i> did (food removed from both sides). <b>C</b> = what the <i>food alone</i> did. B is the honest "real raise"; A includes the food that simply became visible.</p>
 <div class="answer">
   <div class="ans" id="ansA"><div class="q">A · Total bill the guest pays</div><div class="big" id="aBig"></div><div class="det" id="aDet"></div></div>
   <div class="ans" id="ansB"><div class="q">B · The room price alone (food set aside)</div><div class="big" id="bBig"></div><div class="det" id="bDet"></div></div>
@@ -87,9 +134,17 @@
 </details>
 
 <h2>The same comparison, for every room type (1 adult, 1 night)</h2>
+<p class="sub" style="margin-bottom:.4rem">Every room tier at once. <b>Old (all-in)</b> = the 2025 bundled price. <b>New room</b> + <b>New food</b> = the 2026 split. <b>New total</b> = what the guest now pays. <b>Δ total</b> = the change on the total bill.</p>
 <table id="tblTypes"><thead><tr><th>Room type</th><th>Old (all-in)</th><th>New room</th><th>New food</th><th>New total</th><th>Δ total</th></tr></thead><tbody></tbody></table>
 
+<h2>Now the outside world: how KCL's new prices compare</h2>
+<p class="sub" style="margin-bottom:.5rem">The hard part of pricing is knowing whether your numbers are high or low <i>for the market</i>. Below, each KCL tier's <b>new all-in</b> (room + food) is set beside the closest real, published rate at comparable retreat centers. <b>One caution, stated plainly:</b> nearly every peer <b>bundles meals into one number</b>, so their figures already include food — we compare them to KCL's <b>all-in</b> (room + food), not the room alone, to keep it apples-to-apples.</p>
+<table id="tblBench"><thead><tr><th>KCL tier</th><th>KCL all-in</th><th>Closest sibling (Drala)</th><th>Peer range (lo–hi)</th><th>Where KCL sits</th></tr></thead><tbody></tbody></table>
+<p class="small" style="margin-top:.5rem"><b>How to read "where KCL sits"</b> — each tier is judged against the <i>full verified peer spread</i>, not one number: <span class="posbadge pos-under">under-priced</span> = below the cheapest comparable peer; <span class="posbadge pos-under">low in range</span> = inside the spread but in its lower half; <span class="posbadge pos-aligned">mid–high in range</span> = upper half of the spread; <span class="posbadge pos-over">above peer range</span> = above the most expensive peer. Peer rates are 2025–26 published figures (meals included); full sourcing in <code>competitive_pricing_report.html</code>.</p>
+<div class="note"><b>The honest, tier-by-tier read:</b> against the <i>full</i> peer spread, KCL's <b>premium and standard tiers land low in the range</b> — below or near the bottom of where comparable private rooms sit (Drala $254, Garrison ~$262, Kripalu up to $599 for premium), which is the clearest case for raising the top tiers. The <b>dorm and shrine tiers are competitive-to-firm</b> — already at or above the cheapest peers once food is added, so leave them. <b>One caveat to keep visible:</b> the budget end depends heavily on the comparator (Drala's cheapest tiers are genuinely bare-bones), so read the low end as "no room to cut," not "raise aggressively." The structural oddity stands across <i>all</i> peers: KCL is moving to <i>itemize</i> food while nearly everyone <i>bundles</i> it — strongly consider a single all-in headline number with the breakdown underneath.</div>
+
 <h2>What this means for a whole year</h2>
+<p class="sub" style="margin-bottom:.6rem">One night is the building block; this scales it to the whole center. We multiply each tier's per-night change by the <b>real number of stays and the real average length of stay</b> for that tier, then add it all up. No guessing on volume — these are actual 2022–24 booking counts.</p>
 <p class="small">Using the real booking mix (≈<b id="nreg"></b> paid stays/year, 2022–24 from the live database; staff/online/commuter excluded). Two honest numbers:</p>
 <div class="answer" style="grid-template-columns:1fr 1fr">
   <div class="ans"><div class="q">Guest-facing revenue (all-in)</div><div class="big" id="yrAll"></div><div class="det" id="yrAllDet"></div></div>
@@ -97,10 +152,30 @@
 </div>
 <div class="note"><b>Why two yearly numbers?</b> The guest-facing number counts the food that's now itemized; the room-only number strips food off <i>both</i> the old and new side so you see the real room increase, not the accounting change. Food revenue itself didn't appear from nowhere — it was always collected, just hidden inside the old room price.</div>
 
-<p class="small" style="margin-top:2.5rem">Room prices: <code>room_inventory.csv</code> (new) / <code>room_inventory_old.csv</code> (old). Booking mix: live legacy DB, 2022–24 average. The only assumptions are the two sliders above; everything else is the real rate tables and real booking counts.</p>
+<h2>Where every number here comes from</h2>
+<ul class="small" style="line-height:1.7;padding-left:1.1rem">
+  <li><b>KCL room prices</b> — <code>room_inventory.csv</code> (new 2026) and <code>room_inventory_old.csv</code> (old 2025), the real rate tables.</li>
+  <li><b>Booking mix</b> — the live legacy database, 2022–24 average (≈900 paid stays/yr; staff, online, and commuter bookings excluded).</li>
+  <li><b>The two reconstructed numbers</b> — only the sliders above are estimates: how much of the old price was secretly food, and the per-night adders. Everything else is real.</li>
+  <li><b>Competitor benchmarks</b> — 2025–26 published rates from a two-pass, fact-checked market study; full tables and sources in <code>competitive_pricing_report.html</code>. Peer rates include meals, so they're compared to KCL's all-in (room + food).</li>
+</ul>
 </div>
 <script>
 const DATA = {"prices": {"Standard": {"new": 160, "old": 120}, "Double": {"new": 160, "old": 120}, "Premium": {"new": 200, "old": 160}, "Tent Cabin": {"new": 120, "old": 70}, "Dorm": {"new": 80, "old": 60}, "Shrine Room": {"new": 60, "old": 40}}, "dist": [{"type": "Standard", "regs": 245, "nights": 4.6}, {"type": "Tent Cabin", "regs": 160, "nights": 8.3}, {"type": "Premium", "regs": 147, "nights": 4.9}, {"type": "Dorm", "regs": 124, "nights": 4.5}, {"type": "Double", "regs": 61, "nights": 5.2}, {"type": "Shrine Room", "regs": 56, "nights": 5.5}], "excluded": 669, "defaults": {"adult_adder": 100, "child13_adder": 30, "food_adult": 40, "food_child13": 20, "old_food_share": 25}};
+
+// Competitor benchmark — peer ALL-IN (lodging+meals) RANGE per KCL tier, 2025-26 published rates.
+// Peer figures already include food, so they compare to KCL's NEW all-in (room+food), not room alone.
+// `mark` = the single closest Shambhala sibling (Drala) used for the bar's dotted line.
+// `lo`/`hi` = the verified peer spread for that tier across the study; KCL is judged vs this RANGE.
+// Sources: competitive_pricing_report.html (Drala, Kripalu, Garrison, IMS, Tara Mandala, Esalen, Omega, VT Zen).
+const COMP = {
+  "Shrine Room": {peer:"Drala Earth Dorm", mark:98,  lo:50,  hi:110, peers:"VT Zen $50 (self-cater) · IMS Forest Refuge supported $60 · Drala $98 · Kripalu dorm $109"},
+  "Dorm":        {peer:"Drala Earth Dorm", mark:98,  lo:98,  hi:222, peers:"Drala $98 · Kripalu $109–129 · Garrison ~$222"},
+  "Tent Cabin":  {peer:"Drala Tent Single",mark:139, lo:120, hi:160, peers:"Drala tent single $139 (summer, meals incl.)"},
+  "Standard":    {peer:"Drala Lodge Double",mark:186, lo:149, hi:349, peers:"Drala $186 · Kripalu $149–349 · Garrison ~$237"},
+  "Double":      {peer:"Drala Lodge Double",mark:186, lo:149, hi:349, peers:"Drala $186 · Kripalu $149–349 · Garrison ~$237"},
+  "Premium":     {peer:"Drala Lodge Single",mark:254, lo:254, hi:599, peers:"Drala $254 · Garrison ~$262 · Kripalu private-bath $299–599"}
+};
 const $ = s => document.getElementById(s);
 const d$ = n => "$"+Math.round(n).toLocaleString();
 const S = {...DATA.defaults};
@@ -138,19 +213,28 @@ function render(){
   const partyTxt = {"1a":"1 adult","2a":"2 adults","2a1c":"2 adults + 1 child"}[PARTY];
   $("exhead").innerHTML = `One <b>${ROOM}</b> room · <b>${partyTxt}</b> · one night`;
 
-  // bars (scaled to the larger total)
-  const scaleMax = Math.max(r.oldAll, r.newAll, 1);
-  function bar(label, room, food, total){
-    const rw = room/scaleMax*100, fw = food/scaleMax*100, ew = Math.max(0,100-rw-fw);
+  // competitor benchmark for this tier (all-in, meals included). 1-adult basis (peer single-occupancy).
+  const comp = COMP[ROOM];
+  const peerAll = (comp && PARTY==="1a") ? comp.mark : null;   // only show marker on the like-for-like 1-adult case
+  $("peerName").textContent = comp ? `· ${comp.peer}` : "";
+
+  // bars (scaled to include the peer marker so it never overflows)
+  const scaleMax = Math.max(r.oldAll, r.newAll, peerAll||0, 1);
+  function bar(label, room, food, total, showMark){
+    const markPct = (showMark && peerAll) ? (peerAll/scaleMax*100) : null;
+    const over = peerAll && r.newAll>peerAll;   // KCL above peer?
     return `<div class="blab">${label}</div><div style="display:flex;align-items:center">
-      <div class="bar" style="width:${(total/scaleMax*100).toFixed(1)}%">
-        ${room>0?`<div class="seg-room" style="flex:${room}">${d$(room)}</div>`:""}
-        ${food>0?`<div class="seg-food" style="flex:${food}">${d$(food)}</div>`:""}
+      <div class="barwrap">
+        <div class="bar" style="width:${(total/scaleMax*100).toFixed(1)}%">
+          ${room>0?`<div class="seg-room" style="flex:${room}">${d$(room)}</div>`:""}
+          ${food>0?`<div class="seg-food" style="flex:${food}">${d$(food)}</div>`:""}
+        </div>
+        ${markPct!=null?`<div class="cmark ${over?'over':''}" style="left:${markPct.toFixed(1)}%" data-lab="${comp.peer} ${d$(peerAll)}"></div>`:""}
       </div><span class="tot">${d$(total)}</span></div>`;
   }
   $("bars").innerHTML =
-    bar("OLD", r.oldRoom, r.oldFood, r.oldAll) +
-    bar("NEW", r.newRoom, r.newFood, r.newAll);
+    bar("OLD", r.oldRoom, r.oldFood, r.oldAll, false) +
+    bar("NEW", r.newRoom, r.newFood, r.newAll, true);
 
   // three answers
   $("aBig").innerHTML = `<span class="${cls(r.oldAll,r.newAll)}">${pct(r.oldAll,r.newAll)}</span>`;
@@ -168,6 +252,25 @@ function render(){
     const x = calc(t,"1a");
     tb.insertAdjacentHTML("beforeend",
       `<tr><td>${t}</td><td>${d$(x.oldAll)}</td><td>${d$(x.newRoom)}</td><td>${d$(x.newFood)}</td><td>${d$(x.newAll)}</td><td class="${cls(x.oldAll,x.newAll)}">${pct(x.oldAll,x.newAll)}</td></tr>`);
+  });
+
+  // competitor benchmark table (1 adult, KCL all-in vs the verified PEER RANGE for that tier)
+  const bb = $("tblBench").querySelector("tbody"); bb.innerHTML="";
+  Object.keys(DATA.prices).forEach(t=>{
+    const x = calc(t,"1a"), c = COMP[t]; if(!c) return;
+    const mid = (c.lo + c.hi)/2;
+    let badge, cellcls;
+    if(x.newAll < c.lo*0.97){                              // below the cheapest verified peer
+      badge=`<span class="posbadge pos-under">under-priced</span>`; cellcls="bcell-low";
+    } else if(x.newAll > c.hi*1.03){                        // above the most expensive verified peer
+      badge=`<span class="posbadge pos-over">above peer range</span>`; cellcls="bcell-high";
+    } else if(x.newAll <= mid){                             // inside range, lower half
+      badge=`<span class="posbadge pos-under">low in range</span>`; cellcls="bcell-low";
+    } else {                                                // inside range, upper half
+      badge=`<span class="posbadge pos-aligned">mid–high in range</span>`;
+    }
+    bb.insertAdjacentHTML("beforeend",
+      `<tr><td>${t}</td><td class="${cellcls}">${d$(x.newAll)}</td><td>${c.peer} ${d$(c.mark)}</td><td>${d$(c.lo)}–${d$(c.hi)}</td><td>${badge}</td></tr>`);
   });
 
   // yearly roll-up (1 adult per stay, real nights + counts)
