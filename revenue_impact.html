@@ -22,6 +22,7 @@
  .blab{font-weight:600;text-align:right;font-size:.92rem}
  .bar{display:flex;height:42px;border-radius:7px;overflow:hidden;background:#f0eee9;font-size:.85rem;font-weight:600;color:#fff}
  .seg-room{background:var(--room);display:flex;align-items:center;justify-content:center;min-width:42px}
+ .seg-bump{background:repeating-linear-gradient(45deg,#2f5a86,#2f5a86 6px,#3b6ea5 6px,#3b6ea5 12px);display:flex;align-items:center;justify-content:center;min-width:30px;box-shadow:inset 1px 0 0 rgba(255,255,255,.35)}
  .seg-food{background:var(--food);display:flex;align-items:center;justify-content:center;min-width:36px}
  .seg-empty{flex:1}
  .tot{font-variant-numeric:tabular-nums;font-weight:700;font-size:1.05rem;margin-left:.6rem;white-space:nowrap}
@@ -80,10 +81,10 @@
     </div>
     <div class="defcard">
       <div class="dtag dtag-new">NEW</div>
-      <p>The redesigned <b>2026</b> model. It <b>splits that one number into two visible lines</b>: a <b>room rate</b> (the bed) and a <b>food rate</b> (~$40/adult/night for three meals). Same guest, now an itemized bill: <b>$160 room + $40 food = $200.</b> The food was always being paid for — the new model just makes it <b>countable</b>.</p>
+      <p>The redesigned <b>2026</b> model does <b>two things at once</b>: <b>(1) it raises the room rate</b> (e.g. Standard $120 → $160), and <b>(2) it pulls food out as its own line</b> (~$40/adult/night for three meals). Same guest, now an itemized bill: <b>$160 room + $40 food = $200.</b></p>
     </div>
   </div>
-  <div class="note dnote"><b>So the central question this page answers:</b> when we pull the hidden food out of the old price and set it beside the new itemized price, <b>how much did the room itself really go up</b> — versus how much of the "increase" is just food becoming visible? The three boxes below (<b>A</b>, <b>B</b>, <b>C</b>) separate those two things on purpose.</div>
+  <div class="note dnote"><b>Two changes are happening together — keep them separate in your head:</b> <b>(1) a room-rate increase</b> that is real, deliberate, and <b>not uniform across accommodation types</b> (see the table just below), and <b>(2) the food unbundling</b> — meals that were always paid for, now made visible. The central question this page answers: of the higher bill a guest sees, how much is the genuine room raise versus food simply becoming countable? Boxes <b>A</b>, <b>B</b>, <b>C</b> below separate them.</div>
   <p class="small defkey"><b>Three numbers, defined once:</b>
     <span class="kdef"><span class="ksw" style="background:var(--room)"></span><b>Room</b> — the lodging charge alone (the bed).</span>
     <span class="kdef"><span class="ksw" style="background:var(--food)"></span><b>Food</b> — the meals charge (3 meals/day).</span>
@@ -91,8 +92,13 @@
   </p>
 </div>
 
+<h2>The proposed room-rate increase, by accommodation type</h2>
+<p class="sub" style="margin-bottom:.5rem">Before any food is added, the <b>room rate itself</b> is going up — and <b>by design, not evenly</b>. These are the concrete proposed rates straight from <code>room_inventory.csv</code> (new) and <code>room_inventory_old.csv</code> (old), single-occupancy room line. This is a real price increase on the accommodation, <i>separate from</i> the food unbundling.</p>
+<table id="tblBump"><thead><tr><th>Accommodation</th><th>Old room rate</th><th>New room rate</th><th>Increase ($)</th><th>Increase (%)</th></tr></thead><tbody></tbody></table>
+<div class="note"><b>The increase was deliberately uneven.</b> The dollar jumps range from <b>+$20 to +$50</b>, and in percentage terms from <b>+25% to +71%</b>. <b>Tent Cabin rose the most (+71%)</b>, then <b>Shrine Room (+50%)</b>; the core rooms (Standard, Double, Dorm, Accessibility) rose a flat <b>+33%</b>; <b>Premium rose the least in % terms (+25%)</b> despite the largest-tier $40 jump. <b>Campground platforms stay free.</b> So "the new model" is not one change but a <i>schedule</i> of room increases layered with the food split.</div>
+
 <h2>Try it yourself — pick a room and a party</h2>
-<p class="sub" style="margin-bottom:.7rem">Choose any room type and who's staying. The worked example, the three boxes, and the plain-words summary below all update live.</p>
+<p class="sub" style="margin-bottom:.7rem">Choose any room type and who's staying. The worked example, the three boxes, and the plain-words summary below all update live. The new bar is split into three parts so you can see the <b>room increase</b> as its own slice.</p>
 
 <div class="pickers">
   <div class="pick"><span class="plab">Room type</span>
@@ -106,12 +112,14 @@
 </div>
 
 <h2>Shown: the old bill vs. the new bill, side by side</h2>
-<p class="sub" style="margin-bottom:.7rem">Each bar is one night's total, drawn to scale. The <span style="color:var(--room);font-weight:600">blue</span> part is the room, the <span style="color:var(--food);font-weight:600">gold</span> part is food. The <b>old bar's split is reconstructed</b> (the old system never recorded it — see the assumptions below); the <b>new bar's split is exact</b>. The dotted line marks the <b>closest comparable retreat center's all-in rate</b> for that tier.</p>
+<p class="sub" style="margin-bottom:.7rem">Each bar is one night's total, drawn to scale. The <span style="color:var(--room);font-weight:600">solid blue</span> is the old room <i>after the hidden meals are removed from it</i>; the <span style="color:var(--room);font-weight:600">striped blue</span> is the <b>room increase</b> stacked on top; the <span style="color:var(--food);font-weight:600">gold</span> is food. The dotted line marks the <b>closest comparable retreat center's all-in rate</b> for that tier.</p>
+<div class="note" style="margin-bottom:1rem"><b>Why the striped "increase" here looks bigger than the table above.</b> Two honest ways to measure the room raise: <b>(1) the recorded room lines</b> — Standard $120 → $160, a <b>+$40</b> bump (that's the table above, the literal proposal); and <b>(2) food-stripped</b> — since the old $120 secretly held ~$30 of meals, the old <i>room-only</i> was ~$90, so the room-only figure moves $90 → $160, a larger <b>+$70</b>. The bar uses view (2) so the blue base lines up with the old bar's blue. Same decision, two lenses: the table answers "how much did the published room price go up?", the bar answers "once food is set aside, how much bigger is the room charge?"</div>
 <div class="ex">
   <div class="exhead" id="exhead"></div>
   <div class="bars" id="bars"></div>
   <div class="legend">
-    <span><span class="sw" style="background:var(--room)"></span>Room</span>
+    <span><span class="sw" style="background:var(--room)"></span>Room (carried over)</span>
+    <span><span class="sw" style="background:repeating-linear-gradient(45deg,#2f5a86,#2f5a86 3px,#3b6ea5 3px,#3b6ea5 6px)"></span>Room increase</span>
     <span><span class="sw" style="background:var(--food)"></span>Food (meals)</span>
     <span><span class="sw" style="background:var(--mut);width:3px;height:13px;border-radius:1px"></span>Peer all-in <span class="small" id="peerName"></span></span>
   </div>
@@ -220,21 +228,26 @@ function render(){
 
   // bars (scaled to include the peer marker so it never overflows)
   const scaleMax = Math.max(r.oldAll, r.newAll, peerAll||0, 1);
-  function bar(label, room, food, total, showMark){
+  // NEW bar splits into 3: room carried over (= old room-only) + room INCREASE (striped) + food.
+  const roomBase = Math.min(r.oldRoom, r.newRoom);     // the part of the new room that matches the old room-only
+  const roomBump = Math.max(0, r.newRoom - r.oldRoom); // the genuine room-rate increase (room-only basis)
+  // bar() renders up to 3 stacked segments: base room, optional striped bump, optional food.
+  function bar(label, base, bump, food, total, showMark){
     const markPct = (showMark && peerAll) ? (peerAll/scaleMax*100) : null;
     const over = peerAll && r.newAll>peerAll;   // KCL above peer?
     return `<div class="blab">${label}</div><div style="display:flex;align-items:center">
       <div class="barwrap">
         <div class="bar" style="width:${(total/scaleMax*100).toFixed(1)}%">
-          ${room>0?`<div class="seg-room" style="flex:${room}">${d$(room)}</div>`:""}
+          ${base>0?`<div class="seg-room" style="flex:${base}">${d$(base)}</div>`:""}
+          ${bump>0?`<div class="seg-bump" style="flex:${bump}" title="room-rate increase">+${d$(bump)}</div>`:""}
           ${food>0?`<div class="seg-food" style="flex:${food}">${d$(food)}</div>`:""}
         </div>
         ${markPct!=null?`<div class="cmark ${over?'over':''}" style="left:${markPct.toFixed(1)}%" data-lab="${comp.peer} ${d$(peerAll)}"></div>`:""}
       </div><span class="tot">${d$(total)}</span></div>`;
   }
   $("bars").innerHTML =
-    bar("OLD", r.oldRoom, r.oldFood, r.oldAll, false) +
-    bar("NEW", r.newRoom, r.newFood, r.newAll, true);
+    bar("OLD", r.oldRoom, 0, r.oldFood, r.oldAll, false) +
+    bar("NEW", roomBase, roomBump, r.newFood, r.newAll, true);
 
   // three answers
   $("aBig").innerHTML = `<span class="${cls(r.oldAll,r.newAll)}">${pct(r.oldAll,r.newAll)}</span>`;
@@ -244,7 +257,9 @@ function render(){
   $("cBig").innerHTML = `<span class="${cls(r.oldFood,r.newFood)}">${pct(r.oldFood,r.newFood)}</span>`;
   $("cDet").textContent = `${d$(r.oldFood)} → ${d$(r.newFood)} (food only)`;
 
-  $("plain").innerHTML = `<b>In plain words:</b> a guest in a ${ROOM} room (${partyTxt}) used to pay <b>${d$(r.oldAll)}</b> a night, all-in. Now they pay <b>${d$(r.newRoom)}</b> for the room plus <b>${d$(r.newFood)}</b> for meals = <b>${d$(r.newAll)}</b> — that's <b class="${cls(r.oldAll,r.newAll)}">${pct(r.oldAll,r.newAll)}</b> more on the total bill <span class="small">(box A)</span>. But the meals were always being charged — hidden inside the old price. Pull food out of both sides and the <i>room</i> itself went from about ${d$(r.oldRoom)} to ${d$(r.newRoom)}, a <b class="${cls(r.oldRoom,r.newRoom)}">${pct(r.oldRoom,r.newRoom)}</b> room raise <span class="small">(box B)</span>. That's the real increase — not an illusion of "unbundling."`;
+  const lineOld = DATA.prices[ROOM].old, lineNew = DATA.prices[ROOM].new, lineInc = lineNew-lineOld;
+  const lineIncPct = lineOld>0 ? pct(lineOld,lineNew) : "";
+  $("plain").innerHTML = `<b>In plain words:</b> a guest in a ${ROOM} room (${partyTxt}) used to pay <b>${d$(r.oldAll)}</b> a night, all-in (room + hidden meals). Now they pay <b>${d$(r.newRoom)}</b> room + <b>${d$(r.newFood)}</b> meals = <b>${d$(r.newAll)}</b> — <b class="${cls(r.oldAll,r.newAll)}">${pct(r.oldAll,r.newAll)}</b> more on the total bill <span class="small">(box A)</span>. <b>Two distinct things drive that:</b> <span style="color:var(--up)">①</span> the <b>${ROOM} room rate itself was raised ${d$(lineOld)} → ${d$(lineNew)}</b> (a <b class="up">${lineIncPct}</b> room increase — the striped slice on the bar), and <span style="color:var(--food)">②</span> the <b>${d$(r.newFood)} of meals</b> that were always paid for is now shown as its own line instead of hiding in the old price. Box B isolates the real room move; box C isolates food.`;
 
   // per-type table (1 adult)
   const tb = $("tblTypes").querySelector("tbody"); tb.innerHTML="";
@@ -252,6 +267,16 @@ function render(){
     const x = calc(t,"1a");
     tb.insertAdjacentHTML("beforeend",
       `<tr><td>${t}</td><td>${d$(x.oldAll)}</td><td>${d$(x.newRoom)}</td><td>${d$(x.newFood)}</td><td>${d$(x.newAll)}</td><td class="${cls(x.oldAll,x.newAll)}">${pct(x.oldAll,x.newAll)}</td></tr>`);
+  });
+
+  // proposed room-rate increase table (room LINE old->new, concrete from CSV; party-independent)
+  const ib = $("tblBump").querySelector("tbody"); ib.innerHTML="";
+  Object.keys(DATA.prices).forEach(t=>{
+    const p = DATA.prices[t], inc = p.new - p.old;
+    const pctTxt = p.old>0 ? `+${Math.round((p.new-p.old)/p.old*100)}%` : "—";
+    const isMax = false;
+    ib.insertAdjacentHTML("beforeend",
+      `<tr><td>${t}</td><td>${d$(p.old)}</td><td>${d$(p.new)}</td><td class="${inc>0?'bcell-high':''}">${inc>0?'+':''}${d$(inc)}</td><td class="${inc>0?'bcell-high':''}">${pctTxt}</td></tr>`);
   });
 
   // competitor benchmark table (1 adult, KCL all-in vs the verified PEER RANGE for that tier)
